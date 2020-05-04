@@ -1,22 +1,26 @@
-##### Getting Logo Infomation #####
+##### Querying All Logos of A User #####
 #Query
 {
-  logos
+  user(id:$id)
   {
-    _id
-    text
-    fontSize
-    color
-    backgroundColor
-    borderColor
-    borderRadius
-    borderWidth
-    padding
-    margins
-    lastUpdate
+    logos
+    {
+      _id
+      text
+      fontSize
+      color
+      backgroundColor
+      borderColor
+      borderRadius
+      borderWidth
+      width
+      height
+      imageWidth
+      imageHeight
+      lastUpdate
+    }
   }
 }
-
 
 ##### Updating a logo #####
 #Query
@@ -29,8 +33,10 @@ mutation updateLogo(
         $borderColor: String!,
         $borderRadius: Int!,
         $borderWidth: Int!,
-        $padding: Int!,
-        $margins: Int!) {
+	$width: Int!,
+	$height: Int!,
+	$imageWidth: Int!,
+	$imageHeight: Int!) {
             updateLogo(
                 id: $id,
                 text: $text,
@@ -40,8 +46,10 @@ mutation updateLogo(
                 borderColor: $borderColor,
                 borderRadius: $borderRadius,
                 borderWidth: $borderWidth,
-                padding: $padding,
-                margins: $margins) {
+		width: $width,
+		height: $height,
+		imageWidth: $imageWidth,
+		imageHeight: $imageHeight) {
                     lastUpdate
                 }
         }
@@ -56,14 +64,30 @@ mutation updateLogo(
   "borderColor": "#AC4248",
   "borderRadius": 45,
   "borderWidth": 30,
-  "padding": 42,
-  "margins": 10 
+  "width": 10,
+  "height": 20,
+  "imageWidth": 100,
+  "imageHeight": 100
 }
 
+##### Adding New User #####
+# Query
+mutation AddUser($name: String!) 
+    {
+        addUser(name: $name) 
+        {
+            _id
+        }
+    }
+#Query Variables
+{ 
+  "name": "Sam"
+}
 
 ##### Adding new logo #####
 # Query
 mutation AddLogo(
+	$userID: String!,
         $text: String!,
         $color: String!,
         $fontSize: Int!,
@@ -71,10 +95,13 @@ mutation AddLogo(
         $borderColor: String!,
         $borderRadius: Int!,
         $borderWidth: Int!,
-        $padding: Int!,
-        $margins: Int!) 
+	$width: Int!,
+	$height: Int!,
+	$imageWidth: Int!,
+	$imageHeight: Int!) 
     {
         addLogo(
+	    userID: $userID,
             text: $text,
             color: $color,
             fontSize: $fontSize,
@@ -82,14 +109,17 @@ mutation AddLogo(
             borderColor: $borderColor,
             borderRadius: $borderRadius,
             borderWidth: $borderWidth,
-            padding: $padding,
-            margins: $margins) 
+	    width: $width,
+	    height: $height,
+	    imageWidth: $imageWidth,
+	    imageHeight: $imageHeight) 
         {
             _id
         }
     }
 #Query Variables
 { 
+  "userId": "5e9147637dadb821785196c1",
   "text": "New Man",
   "color": "#5FF942",
   "fontSize": 58, 
@@ -97,12 +127,14 @@ mutation AddLogo(
   "borderColor": "#AC4DD8",
   "borderRadius": 5,
   "borderWidth": 12,
-  "padding": 23,
-  "margins": 50 
+  "width": 10,
+  "height": 20,
+  "imageWidth": 100,
+  "imageHeight": 100
 }
 
 
-##### Deleting Logo #####
+##### Deleting Single Logo #####
 #Query
 mutation removeLogo($id: String!) {
     removeLogo(id:$id) {
@@ -117,7 +149,11 @@ mutation removeLogo($id: String!) {
 ##### Deleting All Logos #####
 #Query
 mutation removeAllLogos() {
-    removeAllLogos() {
-      
-    }
+    removeAllLogos()
+  }
+
+##### Deleting All Users #####
+#Query
+mutation removeAllUsers(){
+    removeAllUsers()
   }
