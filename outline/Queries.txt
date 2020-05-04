@@ -1,0 +1,123 @@
+##### Getting Logo Infomation #####
+#Query
+{
+  logos
+  {
+    _id
+    text
+    fontSize
+    color
+    backgroundColor
+    borderColor
+    borderRadius
+    borderWidth
+    padding
+    margins
+    lastUpdate
+  }
+}
+
+
+##### Updating a logo #####
+#Query
+mutation updateLogo(
+        $id: String!,
+        $text: String!,
+        $color: String!,
+        $fontSize: Int!,
+        $backgroundColor: String!,
+        $borderColor: String!,
+        $borderRadius: Int!,
+        $borderWidth: Int!,
+        $padding: Int!,
+        $margins: Int!) {
+            updateLogo(
+                id: $id,
+                text: $text,
+                color: $color,
+                fontSize: $fontSize,
+                backgroundColor: $backgroundColor,
+                borderColor: $borderColor,
+                borderRadius: $borderRadius,
+                borderWidth: $borderWidth,
+                padding: $padding,
+                margins: $margins) {
+                    lastUpdate
+                }
+        }
+#Query Variables
+{
+  
+  "id": "5e9147637d70b821785196c1", 
+  "text": "Old Man",
+  "color": "#573942",
+  "fontSize": 25, 
+  "backgroundColor": "#206523",
+  "borderColor": "#AC4248",
+  "borderRadius": 45,
+  "borderWidth": 30,
+  "padding": 42,
+  "margins": 10 
+}
+
+
+##### Adding new logo #####
+# Query
+mutation AddLogo(
+        $text: String!,
+        $color: String!,
+        $fontSize: Int!,
+        $backgroundColor: String!,
+        $borderColor: String!,
+        $borderRadius: Int!,
+        $borderWidth: Int!,
+        $padding: Int!,
+        $margins: Int!) 
+    {
+        addLogo(
+            text: $text,
+            color: $color,
+            fontSize: $fontSize,
+            backgroundColor: $backgroundColor,
+            borderColor: $borderColor,
+            borderRadius: $borderRadius,
+            borderWidth: $borderWidth,
+            padding: $padding,
+            margins: $margins) 
+        {
+            _id
+        }
+    }
+#Query Variables
+{ 
+  "text": "New Man",
+  "color": "#5FF942",
+  "fontSize": 58, 
+  "backgroundColor": "#2DD523",
+  "borderColor": "#AC4DD8",
+  "borderRadius": 5,
+  "borderWidth": 12,
+  "padding": 23,
+  "margins": 50 
+}
+
+
+##### Deleting Logo #####
+#Query
+mutation removeLogo($id: String!) {
+    removeLogo(id:$id) {
+      _id
+    }
+  }
+#Query Variables
+{ 
+  "id": "5e9147637d70b821785196c1"
+}
+
+##### Deleting All Logos #####
+#Query
+mutation removeAllLogos() {
+    removeAllLogos() {
+      
+    }
+  }
