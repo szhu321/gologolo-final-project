@@ -3,29 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import {BrowserRouter as Router, Route} from 'react-router-dom'
+import App from './App'
 
-//Screens
-import HomeScreen from './components/HomeScreen';
-import ViewLogoScreen from './components/ViewLogoScreen';
-import EditLogoScreen from './components/EditLogoScreen';
-import LoginScreen from './components/LoginScreen';
-import RegisterScreen from './components/RegisterScreen';
-import NavBar from './components/NavBar';
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <NavBar />
-      <div className = "container">
-        <Route exact path = "/" component = {HomeScreen}/>
-        <Route path = "/view/:id" component = {ViewLogoScreen}/>
-        <Route path = "/edit/:id" component = {EditLogoScreen}/>
-        <Route path = "/login" component = {LoginScreen}/>
-        <Route path = "/register" component = {RegisterScreen}/>
-      </div>
-    </Router>
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
