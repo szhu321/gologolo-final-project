@@ -12,12 +12,6 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    createdLogos: [ //list of logo ids
-        {
-            type: Schema.Types.ObjectId, //logo id.
-            ref: 'Logo'
-        }
-    ]
 });
 
 module.exports = mongoose.model('User', userSchema);

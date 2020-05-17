@@ -39,25 +39,22 @@ const logoSchema = new Schema({
         min: 0,
         max: 255
     },
-    logoTexts: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'LogoText'
-        }
-    ],
-    logoImages: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'LogoImage'
-        }
-    ],
+    width: {
+        type: Number,
+        required: true
+    },
+    height: {
+        type: Number,
+        required: true
+    },
     lastUpdate: {
         type: Date,
         required: true
     },
-    creator: {
+    creatorId: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     }
 });
 

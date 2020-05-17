@@ -86,51 +86,34 @@ mutation AddUser($name: String!)
 
 ##### Adding new logo #####
 # Query
-mutation AddLogo(
-	$userID: String!,
-        $text: String!,
-        $color: String!,
-        $fontSize: Int!,
-        $backgroundColor: String!,
-        $borderColor: String!,
-        $borderRadius: Int!,
-        $borderWidth: Int!,
-	$width: Int!,
-	$height: Int!,
-	$imageWidth: Int!,
-	$imageHeight: Int!) 
-    {
-        addLogo(
-	    userID: $userID,
-            text: $text,
-            color: $color,
-            fontSize: $fontSize,
-            backgroundColor: $backgroundColor,
-            borderColor: $borderColor,
-            borderRadius: $borderRadius,
-            borderWidth: $borderWidth,
-	    width: $width,
-	    height: $height,
-	    imageWidth: $imageWidth,
-	    imageHeight: $imageHeight) 
-        {
-            _id
-        }
-    }
-#Query Variables
-{ 
-  "userId": "5e9147637dadb821785196c1",
-  "text": "New Man",
-  "color": "#5FF942",
-  "fontSize": 58, 
-  "backgroundColor": "#2DD523",
-  "borderColor": "#AC4DD8",
-  "borderRadius": 5,
-  "borderWidth": 12,
-  "width": 10,
-  "height": 20,
-  "imageWidth": 100,
-  "imageHeight": 100
+mutation
+{
+	addLogo(
+		name: "Gologolo",
+		creatorId: "5ebf1b0b407d6822d4405481",
+		backgroundColor: "#2DD523",
+  		borderColor: "#AC4DD8",
+  		borderRadius: 5,
+  		borderWidth: 12,
+		padding: 10,
+		margins: 0,
+		width:200,
+		height:100) 
+	{
+		name,
+		backgroundColor, 
+		borderColor,
+		borderRadius,
+		borderWidth,	
+		padding,
+		margins,
+		width,
+		height,
+		creator{
+			email
+		}
+	}
+        
 }
 
 

@@ -3,11 +3,12 @@ const app = express();
 const port = 3000;
 const graphqlHttp = require('express-graphql');
 const mongoose = require('mongoose');
+const schema = require('./graphql/schema');
 
 
 app.use(express.json());
 app.use('/graphql', graphqlHttp({
-    schema: null,
+    schema: schema,
     rootValue: null,
     graphiql: true
 }));

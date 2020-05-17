@@ -22,6 +22,11 @@ const logoTextSchema = new Schema({
     fontSize: {
         type: Number,
         required: true
+    },
+    logoId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Logo',
+        required: true
     }
 });
 

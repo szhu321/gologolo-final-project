@@ -1,4 +1,4 @@
-const mongoose = require('mogoose');
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
@@ -17,6 +17,11 @@ const logoImageSchema = new Schema({
     },
     height: {
         type: Number,
+        required: true
+    },
+    logoId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Logo',
         required: true
     }
 });
