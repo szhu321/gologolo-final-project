@@ -29,3 +29,5 @@ const logoImageSchema = new Schema({
         required: true
     }
 });
+
+module.exports = mongoose.model('LogoImage', logoImageSchema);

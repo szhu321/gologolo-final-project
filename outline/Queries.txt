@@ -1,7 +1,93 @@
+##### Adding New User #####
+# Query
+mutation {
+	addUser(email: "example@example.com" password: "example")
+  	{
+    		_id
+    		email
+  	}
+}
+
+##### Adding new logo #####
+# Query
+mutation
+{
+	addLogo(
+		name: "Gologolo",
+		creatorId: "5ebf1b0b407d6822d4405481",
+		backgroundColor: "#2DD523",
+  		borderColor: "#AC4DD8",
+  		borderRadius: 5,
+  		borderWidth: 12,
+		padding: 10,
+		margins: 0,
+		width:200,
+		height:100) 
+	{
+		name,
+		backgroundColor, 
+		borderColor,
+		borderRadius,
+		borderWidth,	
+		padding,
+		margins,
+		width,
+		height,
+		creator{
+			email
+		}
+	}
+        
+}
+
+##### Adding new logoText #####
+mutation
+{
+	addLogoText(
+		x: 10,
+		y: 10,
+		text: "I'm a text",
+  		color: "#AC4DD8",
+  		fontSize: 24,
+  		logoId: "") 
+	{
+		x
+		y
+		text
+		color
+		fontSize
+		logo {
+			name
+		}
+	}
+        
+}
+
+##### Adding new logoImage #####
+mutation {
+	addLogoImage(
+		url: "https://i.imgur.com/XcPE5Vx.jpg",
+		x: 100,
+		y: 100,
+		width: 720,
+		height: 480,
+		logoId: "")
+	{
+		url
+		x
+		y
+		width
+		height
+		logo {
+			name
+		}
+	}
+}
+
 ##### Querying All Logos of A User #####
 #Query
 query {
-  user(id: "5ebf1b0b407d6822d4405481")
+  userByEmail(email: "")
   {
     logos
     {
@@ -11,6 +97,7 @@ query {
     }
   }
 }
+
 
 ##### Updating a logo #####
 #Query
@@ -60,72 +147,7 @@ mutation updateLogo(
   "imageHeight": 100
 }
 
-##### Adding New User #####
-# Query
-mutation {
-	addUser(_id: "") 
-}
 
-##### Adding new logo #####
-# Query
-mutation
-{
-	addLogo(
-		name: "Gologolo",
-		creatorId: "5ebf1b0b407d6822d4405481",
-		backgroundColor: "#2DD523",
-  		borderColor: "#AC4DD8",
-  		borderRadius: 5,
-  		borderWidth: 12,
-		padding: 10,
-		margins: 0,
-		width:200,
-		height:100) 
-	{
-		name,
-		backgroundColor, 
-		borderColor,
-		borderRadius,
-		borderWidth,	
-		padding,
-		margins,
-		width,
-		height,
-		creator{
-			email
-		}
-	}
-        
-}
-
-##### Adding new logoText #####
-mutation
-{
-	addLogoText(
-		x: 10,
-		y: 10,
-		text: "I'm a text",
-  		color: "#AC4DD8",
-  		fontSize: 24,
-  		logoId: "") 
-	{
-		name,
-		backgroundColor, 
-		borderColor,
-		borderRadius,
-		borderWidth,	
-		padding,
-		margins,
-		width,
-		height,
-		creator{
-			email
-		}
-	}
-        
-}
-
-##### Adding new logoImage #####
 
 ##### Deleting Single Logo #####
 #Query
@@ -147,6 +169,6 @@ mutation removeAllLogos() {
 
 ##### Deleting All Users #####
 #Query
-mutation removeAllUsers(){
+mutation removeAllUsers() {
     removeAllUsers()
   }

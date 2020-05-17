@@ -70,13 +70,13 @@ const logoType = new GraphQLObjectType({
             }
         },
         texts: {
-            type: logoTextType,
+            type: new GraphQLList(logoTextType),
             resolve(parent, args) {
                 return LogoText.find({logoId: parent.id});
             }
         },
         images: {
-            type: logoImageType,
+            type: new GraphQLList(logoImageType),
             resolve(parent, args) {
                 return LogoImage.find({logoId: parent.id});
             }
@@ -88,6 +88,7 @@ const logoImageType = new GraphQLObjectType({
     name: 'LogoImage',
     fields: () => ({
         _id: {type: GraphQLID},
+        url: {type: GraphQLString},
         x: {type: GraphQLInt},
         y: {type: GraphQLInt},
         width: {type: GraphQLInt},
@@ -123,11 +124,28 @@ const logoTextType = new GraphQLObjectType({
 const rootQuery = new GraphQLObjectType({
     name: 'Query',
     fields: {
-        user: {
+        userById: {
             type: userType,
             args: { id: { type: new GraphQLNonNull(GraphQLID)} },
             resolve(parent, args) {
-                return User.findById(args.id); //get user based on id.
+                return User.findById(args.id).then(user => {
+                    if(user)
+                        return user;
+                    else 
+                        throw new Error('User with id does not exist.');
+                }); //get user based on id.
+            }
+        },
+        userByEmail: {
+            type: userType,
+            args: { email: { type: new GraphQLNonNull(GraphQLString)} },
+            resolve(parent, args) {
+                return User.find({email: args.email}).then(user => {
+                    if(user.length > 0)
+                        return user[0];
+                    else
+                        throw new Error('User with email does not exist.');
+                }); //get user based on id.
             }
         },
         users: {
@@ -176,12 +194,19 @@ const Mutation = new GraphQLObjectType({
                 password: {type: new GraphQLNonNull(GraphQLString)},
             },
             resolve(parent, args) {
-                let user = new User({
-                    _id: args._id? args._id : null,
-                    email: args.email,
-                    password: args.password
+                return User.find({email: args.email}).then(user => {
+                    //console.log(user.length);
+                    if(user.length > 0)
+                        throw new Error('Email taken');
+                    else
+                    {
+                        let newUser = new User({
+                            email: args.email,
+                            password: args.password
+                        });
+                        return newUser.save();
+                    }
                 });
-                return user.save();
             }
         },
         addLogo: {
@@ -226,15 +251,22 @@ const Mutation = new GraphQLObjectType({
                 logoId: {type: new GraphQLNonNull(GraphQLID)},
             },
             resolve(parent, args){
-                let logoText = new LogoText({
-                    x: args.x,
-                    y: args.y,
-                    text: args.text,
-                    color: args.color,
-                    fontSize: args.fontSize,
-                    logoId: args.logoId,
+                return Logo.findById(args.logoId).then(logo => {
+                    if(!logo)
+                        throw new Error('Logo with id does not exist.');
+                    else
+                    {
+                        let logoText = new LogoText({
+                            x: args.x,
+                            y: args.y,
+                            text: args.text,
+                            color: args.color,
+                            fontSize: args.fontSize,
+                            logoId: args.logoId,
+                        });
+                        return logoText.save();
+                    }
                 });
-                return logoText.save();
             }
         },
         addLogoImage: {
@@ -248,15 +280,22 @@ const Mutation = new GraphQLObjectType({
                 logoId: {type: new GraphQLNonNull(GraphQLID)},
             },
             resolve(parent, args){
-                let logoImage = new LogoImage({
-                    url: args.url,
-                    x: args.x,
-                    y: args.y,
-                    width: args.width,
-                    height: args.height,
-                    logoId: args.logoId,
+                return Logo.findById(args.logoId).then(logo => {
+                    if(!logo)
+                        throw new Error('Logo with id does not exist.');
+                    else
+                    {
+                        let logoImage = new LogoImage({
+                            url: args.url,
+                            x: args.x,
+                            y: args.y,
+                            width: args.width,
+                            height: args.height,
+                            logoId: args.logoId,
+                        });
+                        return logoImage.save();
+                    }
                 });
-                return logoImage.save();
             }
         }
     }

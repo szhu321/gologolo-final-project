@@ -16,6 +16,7 @@ app.use('/graphql', cors(), graphqlHttp({
 }));
 
 mongoose.connect('mongodb://localhost/my-gologolo', {
+    promiseLibrary: require('bluebird'),
     useUnifiedTopology: true,
     useNewUrlParser: true,
 })
