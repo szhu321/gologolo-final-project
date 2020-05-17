@@ -297,7 +297,136 @@ const Mutation = new GraphQLObjectType({
                     }
                 });
             }
-        }
+        },
+        updateUser: {
+            type: userType,
+            args: {
+                id: {type: new GraphQLNonNull(GraphQLID)},
+                email: {type: new GraphQLNonNull(GraphQLString)},
+                password: {type: new GraphQLNonNull(GraphQLString)},
+            },
+            resolve(parent, args) {
+                //TODO: Check to see if new email exists.
+                //TODO: Hash the password.
+                return User.findByIdAndUpdate(args.id, {
+                    email: args.email,
+                    password: args.password
+                });
+            }
+        },
+        updateLogo: {
+            type: logoType,
+            args: {
+                id: {type: new GraphQLNonNull(GraphQLID)},
+                name: {type: new GraphQLNonNull(GraphQLString)},
+                creatorId: {type: new GraphQLNonNull(GraphQLID)},
+                backgroundColor: {type: new GraphQLNonNull(GraphQLString)},
+                borderColor: {type: new GraphQLNonNull(GraphQLString)},
+                borderRadius: {type: new GraphQLNonNull(GraphQLInt)},
+                borderWidth: {type: new GraphQLNonNull(GraphQLInt)},
+                padding: {type: new GraphQLNonNull(GraphQLInt)},
+                margins: {type: new GraphQLNonNull(GraphQLInt)},
+                width: {type: new GraphQLNonNull(GraphQLInt)},
+                height: {type: new GraphQLNonNull(GraphQLInt)}
+            },
+            resolve(parent, args)
+            {
+                return Logo.findByIdAndUpdate(args.id, {
+                    name: args.name,
+                    creatorId: args.creatorId,
+                    backgroundColor: args.backgroundColor,
+                    borderColor: args.borderColor,
+                    borderRadius: args.borderRadius,
+                    borderWidth: args.borderWidth,
+                    padding: args.padding,
+                    margins: args.margins,
+                    width: args.width,
+                    height: args.height,
+                    lastUpdate: new Date().toISOString(),
+                });
+            }
+        },
+        updateLogoText: {
+            type: logoTextType,
+            args: {
+                id: {type: new GraphQLNonNull(GraphQLID)},
+                x: {type: new GraphQLNonNull(GraphQLInt)},
+                y: {type: new GraphQLNonNull(GraphQLInt)},
+                text: {type: new GraphQLNonNull(GraphQLString)},
+                color: {type: new GraphQLNonNull(GraphQLString)},
+                fontSize: {type: new GraphQLNonNull(GraphQLInt)},
+                logoId: {type: new GraphQLNonNull(GraphQLID)},
+            },
+            resolve(parent, args) {
+                return LogoText.findByIdAndUpdate(args.id, {
+                    x: args.x,
+                    y: args.y,
+                    text: args.text,
+                    color: args.color,
+                    fontSize: args.fontSize,
+                    logoId: args.logoId,
+                });
+            }
+        },
+        updateLogoImage: {
+            type: logoImageType,
+            args: {
+                id: {type: new GraphQLNonNull(GraphQLID)},
+                url: {type: new GraphQLNonNull(GraphQLString)},
+                x: {type: new GraphQLNonNull(GraphQLInt)},
+                y: {type: new GraphQLNonNull(GraphQLInt)},
+                width: {type: new GraphQLNonNull(GraphQLInt)},
+                height: {type: new GraphQLNonNull(GraphQLInt)},
+                logoId: {type: new GraphQLNonNull(GraphQLID)},
+            },
+            resolve(parent, args) {
+                return LogoImage.findByIdAndUpdate(args.id, {
+                    url: args.url,
+                    x: args.x,
+                    y: args.y,
+                    width: args.width,
+                    height: args.height,
+                    logoId: args.logoId,
+                });
+            }
+        },
+        deleteUser: {
+            type: userType,
+            args: {id: {type: new GraphQLNonNull(GraphQLID)}},
+            resolve(parent, args){
+                return User.findByIdAndDelete(args.id);
+            }
+        },
+        deleteLogo: {
+            type: logoType,
+            args: {id: {type: new GraphQLNonNull(GraphQLID)}},
+            resolve(parent, args){
+                return Logo.findByIdAndDelete(args.id).then(logo => {
+                    if(!logo)
+                        throw new Error('Logo with id does not exist.');
+                    else
+                    {
+                        LogoImage.deleteMany({logoId: logo.id});
+                        LogoText.deleteMany({logoId: logo.id});
+                        return logo;
+                    }
+                });
+            }
+        },
+        deleteLogoText: {
+            type: logoTextType,
+            args: {id: {type: new GraphQLNonNull(GraphQLID)}},
+            resolve(parent, args){
+                return LogoText.findByIdAndDelete(args.id);
+            }
+        },
+        deleteLogoImage: {
+            type: logoImageType,
+            args: {id: {type: new GraphQLNonNull(GraphQLID)}},
+            resolve(parent, args){
+                return LogoImage.findByIdAndDelete(args.id);
+            }
+        },
     }
 });
 
