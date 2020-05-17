@@ -13,6 +13,12 @@ const GET_LOGOS = gql
         }
     }`
 
+function changeLogoName(logoId, newName)
+{
+    console.log('changing ' + logoId + ' to ' + newName);
+    
+}
+
 const HomeScreen = () => 
 {
     const { loading, error, data } = useQuery(GET_LOGOS);
@@ -29,7 +35,10 @@ const HomeScreen = () =>
                     Recent Projects:
                     <div>
                         {data.logos.map(logo => {
-                            return <LogoCard key = {logo._id} logo = {logo}/>
+                            return <LogoCard 
+                            key = {logo._id} 
+                            logo = {logo}
+                            logoNameChangeCallback = {changeLogoName}/>
                         })}
                     </div>
                 </div>
