@@ -50,8 +50,18 @@ const logoType = new GraphQLObjectType({
         margins: {type: GraphQLInt},
         width: {type: GraphQLInt},
         height: {type: GraphQLInt},
-        //logoText
-        //logoImage
+        texts: {
+            type: logoTextType,
+            resolve(parent, args) {
+                return LogoText.find({logoId: parent.id});
+            }
+        },
+        images: {
+            type: logoImageType,
+            resolve(parent, args) {
+                return LogoImage.find({logoId: parent.id});
+            }
+        },
         lastUpdate: {type: GraphQLString},
         creator: {
             type: userType,
@@ -138,6 +148,20 @@ const rootQuery = new GraphQLObjectType({
             resolve(parent, args) {
                 return Logo.find({}); // find all logos by passing in empty object.
             }
+        },
+        logoTexts: {
+            type: new GraphQLList(logoTextType),
+            args: { id: {type: new GraphQLNonNull(GraphQLID)}},
+            resolve(parent, args) {
+                return LogoText.find({logoId: args.id});
+            }
+        },
+        logoImages: {
+            type: new GraphQLList(logoImageType),
+            args: {id: {type: new GraphQLNonNull(GraphQLID)}},
+            resolve(parent, args) {
+                return LogoImage.find({logoId: args.id});
+            }
         }
     }
 });
@@ -153,6 +177,7 @@ const Mutation = new GraphQLObjectType({
             },
             resolve(parent, args) {
                 let user = new User({
+                    _id: args._id? args._id : null,
                     email: args.email,
                     password: args.password
                 });
@@ -215,6 +240,7 @@ const Mutation = new GraphQLObjectType({
         addLogoImage: {
             type: logoImageType,
             args: {
+                url: {type: new GraphQLNonNull(GraphQLString)},
                 x: {type: new GraphQLNonNull(GraphQLInt)},
                 y: {type: new GraphQLNonNull(GraphQLInt)},
                 width: {type: new GraphQLNonNull(GraphQLInt)},
@@ -223,6 +249,7 @@ const Mutation = new GraphQLObjectType({
             },
             resolve(parent, args){
                 let logoImage = new LogoImage({
+                    url: args.url,
                     x: args.x,
                     y: args.y,
                     width: args.width,

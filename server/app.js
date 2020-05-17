@@ -4,12 +4,14 @@ const port = 3000;
 const graphqlHttp = require('express-graphql');
 const mongoose = require('mongoose');
 const schema = require('./graphql/schema');
+var cors = require('cors');
 
 
 app.use(express.json());
-app.use('/graphql', graphqlHttp({
+app.use('*', cors());
+app.use('/graphql', cors(), graphqlHttp({
     schema: schema,
-    rootValue: null,
+    rootValue: global,
     graphiql: true
 }));
 

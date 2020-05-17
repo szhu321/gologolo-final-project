@@ -1,13 +1,14 @@
 import React from 'react'
 
-const LogoCard = (props) => {
+const LogoCard = ({logo}) => {
+    const {_id, name, lastUpdate} = logo;
     return (
         <div className="card">
             <div className="card-body">
                 <div className="container">
                     <div className="row align-items-center">
                         <div className="col-6">
-                            My Logo
+                            {name}
                                 <button>Rename</button>
                         </div>
                         <div className="col-6 text-right">
