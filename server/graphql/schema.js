@@ -164,7 +164,7 @@ const rootQuery = new GraphQLObjectType({
         logos: {
             type: new GraphQLList(logoType),
             resolve(parent, args) {
-                return Logo.find({}); // find all logos by passing in empty object.
+                return Logo.find({}).sort({lastUpdate: -1}); // find all logos by passing in empty object.
             }
         },
         logoTexts: {
@@ -318,31 +318,33 @@ const Mutation = new GraphQLObjectType({
             type: logoType,
             args: {
                 id: {type: new GraphQLNonNull(GraphQLID)},
-                name: {type: new GraphQLNonNull(GraphQLString)},
-                creatorId: {type: new GraphQLNonNull(GraphQLID)},
-                backgroundColor: {type: new GraphQLNonNull(GraphQLString)},
-                borderColor: {type: new GraphQLNonNull(GraphQLString)},
-                borderRadius: {type: new GraphQLNonNull(GraphQLInt)},
-                borderWidth: {type: new GraphQLNonNull(GraphQLInt)},
-                padding: {type: new GraphQLNonNull(GraphQLInt)},
-                margins: {type: new GraphQLNonNull(GraphQLInt)},
-                width: {type: new GraphQLNonNull(GraphQLInt)},
-                height: {type: new GraphQLNonNull(GraphQLInt)}
+                name: {type: GraphQLString},
+                creatorId: {type: GraphQLID},
+                backgroundColor: {type: GraphQLString},
+                borderColor: {type: GraphQLString},
+                borderRadius: {type: GraphQLInt},
+                borderWidth: {type: GraphQLInt},
+                padding: {type: GraphQLInt},
+                margins: {type: GraphQLInt},
+                width: {type: GraphQLInt},
+                height: {type: GraphQLInt}
             },
             resolve(parent, args)
             {
-                return Logo.findByIdAndUpdate(args.id, {
-                    name: args.name,
-                    creatorId: args.creatorId,
-                    backgroundColor: args.backgroundColor,
-                    borderColor: args.borderColor,
-                    borderRadius: args.borderRadius,
-                    borderWidth: args.borderWidth,
-                    padding: args.padding,
-                    margins: args.margins,
-                    width: args.width,
-                    height: args.height,
-                    lastUpdate: new Date().toISOString(),
+                return Logo.findById(args.id).then(logo => {
+                    return Logo.findByIdAndUpdate(args.id, {
+                        name: args.name? args.name: logo.name,
+                        creatorId: args.creatorId? args.creatorId: logo.creatorId,
+                        backgroundColor: args.backgroundColor? args.backgroundColor: logo.backgroundColor,
+                        borderColor: args.borderColor? args.borderColor:logo.borderColor,
+                        borderRadius: args.borderRadius? args.borderRadius: logo.borderRadius,
+                        borderWidth: args.borderWidth? args.borderWidth: logo.borderWidth,
+                        padding: args.padding? args.padding: logo.padding,
+                        margins: args.margins? args.margins: logo.margins,
+                        width: args.width? args.width: logo.width,
+                        height: args.height? args.height: logo.height,
+                        lastUpdate: new Date().toISOString(),
+                    });
                 });
             }
         },
@@ -350,12 +352,12 @@ const Mutation = new GraphQLObjectType({
             type: logoTextType,
             args: {
                 id: {type: new GraphQLNonNull(GraphQLID)},
-                x: {type: new GraphQLNonNull(GraphQLInt)},
-                y: {type: new GraphQLNonNull(GraphQLInt)},
-                text: {type: new GraphQLNonNull(GraphQLString)},
-                color: {type: new GraphQLNonNull(GraphQLString)},
-                fontSize: {type: new GraphQLNonNull(GraphQLInt)},
-                logoId: {type: new GraphQLNonNull(GraphQLID)},
+                x: {type: GraphQLInt},
+                y: {type: GraphQLInt},
+                text: {type: GraphQLString},
+                color: {type: GraphQLString},
+                fontSize: {type: GraphQLInt},
+                logoId: {type: GraphQLID},
             },
             resolve(parent, args) {
                 return LogoText.findByIdAndUpdate(args.id, {
@@ -372,12 +374,12 @@ const Mutation = new GraphQLObjectType({
             type: logoImageType,
             args: {
                 id: {type: new GraphQLNonNull(GraphQLID)},
-                url: {type: new GraphQLNonNull(GraphQLString)},
-                x: {type: new GraphQLNonNull(GraphQLInt)},
-                y: {type: new GraphQLNonNull(GraphQLInt)},
-                width: {type: new GraphQLNonNull(GraphQLInt)},
-                height: {type: new GraphQLNonNull(GraphQLInt)},
-                logoId: {type: new GraphQLNonNull(GraphQLID)},
+                url: {type: GraphQLString},
+                x: {type: GraphQLInt},
+                y: {type: GraphQLInt},
+                width: {type: GraphQLInt},
+                height: {type: GraphQLInt},
+                logoId: {type: GraphQLID},
             },
             resolve(parent, args) {
                 return LogoImage.findByIdAndUpdate(args.id, {

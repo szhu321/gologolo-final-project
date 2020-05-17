@@ -10,21 +10,19 @@ mutation {
 
 ##### Adding new logo #####
 # Query
-mutation
-{
-	addLogo(
-		name: "Gologolo",
-		creatorId: "5ebf1b0b407d6822d4405481",
-		backgroundColor: "#2DD523",
-  		borderColor: "#AC4DD8",
-  		borderRadius: 5,
-  		borderWidth: 12,
-		padding: 10,
-		margins: 0,
-		width:200,
-		height:100) 
-	{
-		name,
+    mutation CreateNewLogo($name: String!, $creatorId: ID!) {
+        addLogo(
+            name: $name,
+            creatorId: $creatorId,
+            backgroundColor: "#2DD523",
+            borderColor: "#AC4DD8",
+            borderRadius: 5,
+            borderWidth: 12,
+            padding: 10,
+            margins: 0,
+            width:200,
+            height:100) {
+                name,
 		backgroundColor, 
 		borderColor,
 		borderRadius,
@@ -36,8 +34,12 @@ mutation
 		creator{
 			email
 		}
-	}
-        
+            }
+    }
+# Variables
+{
+	"name": "Gologolo"
+	"creatorId": ""
 }
 
 ##### Adding new logoText #####
@@ -101,50 +103,45 @@ query {
 
 ##### Updating a logo #####
 #Query
-mutation updateLogo(
-        $id: String!,
-        $text: String!,
-        $color: String!,
-        $fontSize: Int!,
-        $backgroundColor: String!,
-        $borderColor: String!,
-        $borderRadius: Int!,
-        $borderWidth: Int!,
-	$width: Int!,
-	$height: Int!,
-	$imageWidth: Int!,
-	$imageHeight: Int!) {
-            updateLogo(
+mutation UpdateLogo(
+	$id: ID!,
+    $name: String!,
+    $creatorId: ID!,
+    $backgroundColor: String!,
+    $borderColor: String!,
+    $borderRadius: Int!,
+    $borderWidth: Int!,
+    $padding: Int!,
+    $margins: Int!,
+    $width: Int!,
+    $height: Int!) {
+          updateLogo(
                 id: $id,
-                text: $text,
-                color: $color,
-                fontSize: $fontSize,
+                name: $name,
+                creatorId: $creatorId,
                 backgroundColor: $backgroundColor,
                 borderColor: $borderColor,
                 borderRadius: $borderRadius,
                 borderWidth: $borderWidth,
-		width: $width,
-		height: $height,
-		imageWidth: $imageWidth,
-		imageHeight: $imageHeight) {
-                    lastUpdate
+                width: $width,
+                height: $height,
+                padding: $padding,
+                margins: $margins) {
+                    name
                 }
         }
 #Query Variables
 {
-  
   "id": "5e9147637d70b821785196c1", 
-  "text": "Old Man",
-  "color": "#573942",
-  "fontSize": 25, 
+  "name": "example"
   "backgroundColor": "#206523",
   "borderColor": "#AC4248",
   "borderRadius": 45,
   "borderWidth": 30,
-  "width": 10,
-  "height": 20,
-  "imageWidth": 100,
-  "imageHeight": 100
+  "padding": 10,
+  "margins": 20,
+  "width": 100,
+  "height": 100
 }
 
 
