@@ -38,14 +38,18 @@ const LogoCard = ({ logo, logoNameChangeCallback, deleteLogoCallback }) => {
                                 }}
                                 closeCallback={() => {
                                     setShowModal(false);
-                                }} />
+                                }}
+                                placeHolder={"Name"}
+                                inputLabel={"Logo Name: "}
+                                header={"Rename Logo"}
+                                />
 
                         </div>
                         <div className="col-6 text-right">
                             <Link className="btn btn-secondary" to={`/edit/${_id}`}>Edit</Link>
                             <Link className="btn btn-secondary" to={`/view/${_id}`}>View</Link>
                             <button className="btn btn-danger" onClick={() => {
-                                deleteLogoCallback(_id); //delete logo.
+                                deleteLogoCallback(_id, name); //delete logo.
                             }}>Delete</button>
                         </div>
                     </div>

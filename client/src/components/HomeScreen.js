@@ -2,8 +2,10 @@ import React from 'react';
 import LogoCard from './cards/LogoCard';
 import gql from 'graphql-tag';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import {Button} from 'react-bootstrap';
-
+import { Button } from 'react-bootstrap';
+import TextInputModal from './modals/TextInputModal.js';
+import ConfirmModal from './modals/ConfirmModal';
+//import {BrowserRouter} from 'react-router-dom';
 
 const GET_LOGOS = gql
     `query {
@@ -50,21 +52,54 @@ const HomeScreen = () => {
     const [changeLogoNameMutation] = useMutation(UPDATE_LOGO_NAME);
     const [createNewLogo] = useMutation(CREATE_NEW_LOGO);
     const [deleteLogo] = useMutation(DELETE_LOGO);
+    const [showModal, setShowModal] = React.useState(false);
+
+    const [confirmModalProps, setConfirmModalProps] = React.useState({
+        show: false,
+        header: "Deleting Logo",
+        closeCallback: () => {
+            console.log("Closing");
+            setConfirmModalProps(prevProps => {
+                let updatedValues = {show: false}
+                return {...prevProps, ...updatedValues}
+            });
+        },
+    });
+
 
     if (loading) return 'Loading...';
     if (error) return `Error! ${error.message}`;
+
+    let newLogoModalProps = {
+        show: showModal,
+        saveCallback: (name) => {
+            createNewLogo({
+                variables: {
+                    name: name,
+                    creatorId: "5ec179d0c589c304384d9ff3"
+                }
+            }).then(logo => {
+                refetch();
+                //return <Redirect push to = {`/edit/${logo._id}`}/>
+            });
+        },
+        closeCallback: () => {
+            setShowModal(false);
+        },
+        placeHolder: "Name",
+        inputLabel: "Logo Name: ",
+        header: "Creating New Logo",
+    }
 
     return (
         <div className="container">
             <div className="row">
                 <div className="col-3">
-                    <Button onClick = {() => {
-                        createNewLogo({variables: {
-                            name: "Gologolo",
-                            creatorId: "5ec179d0c589c304384d9ff3"
-                        }}).then(logo => {
-                            refetch();
-                        });
+                    <TextInputModal
+                        {...newLogoModalProps}
+                    />
+                    <Button onClick={() => {
+                        setShowModal(true);
                     }}>Create New Logo</Button>
                 </div>
                 <div className="col-9">
@@ -75,17 +110,28 @@ const HomeScreen = () => {
                                 key={logo._id}
                                 logo={logo}
                                 logoNameChangeCallback={(logoId, newName) => {
-                                    changeLogoNameMutation({variables: {id: logoId, name: newName}}).then(() => {
+                                    changeLogoNameMutation({ variables: { id: logoId, name: newName } }).then(() => {
                                         refetch(); //get new logo data.
                                     });
-                                    
+
                                 }}
-                                deleteLogoCallback={(logoId) => {
-                                    deleteLogo({variables: {id: logoId}}).then(() => {
-                                        refetch(); //requery data after delete.
+                                deleteLogoCallback={(logoId, logoName) => {
+                                    
+                                    setConfirmModalProps(prevProps => {
+                                        let updatedValues = {
+                                            show: true,
+                                            bodyText: `Are you sure you want to delete ${logoName}?`,
+                                            confirmCallback: () => {
+                                                deleteLogo({ variables: { id: logoId } }).then(() => {
+                                                    refetch(); //requery data after delete.
+                                                })
+                                            },
+                                        }
+                                        return {...prevProps, ...updatedValues};
                                     });
                                 }} />
                         })}
+                        <ConfirmModal {...confirmModalProps} />
                     </div>
                 </div>
             </div>
