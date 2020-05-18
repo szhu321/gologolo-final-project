@@ -15,6 +15,10 @@ const logoTextSchema = new Schema({
         type:Number,
         required: true
     },
+    type: {
+        type: String,
+        required: true
+    },
     text: {
         type: String,
         required: true

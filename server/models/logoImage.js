@@ -19,6 +19,10 @@ const logoImageSchema = new Schema({
         type:Number,
         required: true
     },
+    type: {
+        type: String,
+        required: true
+    },
     width: {
         type: Number,
         required: true

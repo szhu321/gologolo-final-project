@@ -4,6 +4,7 @@ import EditTextPanel from './edit/EditTextPanel';
 import {useQuery} from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import LogoDisplay from './edit/LogoDisplay';
+import LogoObjectPanel from './edit/LogoObjectPanel';
 
 const GET_LOGO = gql`
     query GetLogo($id: ID!) {
@@ -22,6 +23,8 @@ const GET_LOGO = gql`
             _id
             x
             y
+            z
+            type
             text
             color
             fontSize
@@ -30,6 +33,8 @@ const GET_LOGO = gql`
             _id
             x
             y
+            z
+            type
             url
             width
             height
@@ -48,16 +53,17 @@ const EditLogoScreen = (props) => {
     console.log(data);
     return (
         <div>
-            EditLogoScreen
+            Editing: {data.logo.name}
             <div className='row'>
                 <div className='col-3'>
-                    <EditImagePanel />
+                    <LogoObjectPanel logo = {data.logo}/>
                 </div>
                 <div className='col-6'>
                     <LogoDisplay logo = {data.logo}/>
                 </div>
                 <div className='col-3'>
                     <EditTextPanel />
+                    <EditImagePanel />
                 </div>
             </div>
         </div>

@@ -119,6 +119,8 @@ query GetLogo($id: ID!) {
         _id
         x
         y
+	z
+	type
         text
         color
         fontSize
@@ -127,6 +129,8 @@ query GetLogo($id: ID!) {
         _id
         x
         y
+	z
+	type
         url
         width
         height
