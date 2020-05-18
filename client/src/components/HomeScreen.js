@@ -37,11 +37,18 @@ const CREATE_NEW_LOGO = gql`
             }
     }`
 
+const DELETE_LOGO = gql`
+    mutation DeleteLogo($id: ID!) {
+        deleteLogo(id: $id) {
+            name
+        }
+    }`
 
 const HomeScreen = () => {
     const { loading, error, data, refetch } = useQuery(GET_LOGOS);
     const [changeLogoNameMutation] = useMutation(UPDATE_LOGO_NAME);
     const [createNewLogo] = useMutation(CREATE_NEW_LOGO);
+    const [deleteLogo] = useMutation(DELETE_LOGO);
 
     if (loading) return 'Loading...';
     if (error) return `Error! ${error.message}`;
@@ -71,6 +78,11 @@ const HomeScreen = () => {
                                         refetch(); //get new logo data.
                                     });
                                     
+                                }}
+                                deleteLogoCallback={(logoId) => {
+                                    deleteLogo({variables: {id: logoId}}).then(() => {
+                                        refetch(); //requery data after delete.
+                                    });
                                 }} />
                         })}
                     </div>

@@ -3,10 +3,10 @@ import React from 'react'
 const EditImagePanel = () => {
     return (
         <div className = 'card'>
-            <div class = 'card-header'>
+            <div className = 'card-header'>
                 Edit Image
             </div>
-            <div class = 'card-body'>
+            <div className = 'card-body'>
                 <label>
                     Width:
                     <input/>

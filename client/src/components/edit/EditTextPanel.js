@@ -3,10 +3,10 @@ import React from 'react'
 const EditTextPanel = () => {
     return (
         <div className='card'>
-            <div class='card-header'>
+            <div className='card-header'>
                 Edit Text
             </div>
-            <div class='card-body'>
+            <div className='card-body'>
                 Width: <input />
                 Height: <input />
             </div>

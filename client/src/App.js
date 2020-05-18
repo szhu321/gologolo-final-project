@@ -21,7 +21,7 @@ const App = () => {
     <ApolloProvider client={client}>
       <Router>
         <NavBar />
-        <div className="container">
+        <div>
           <Route exact path="/" component={HomeScreen} />
           <Route path="/view/:id" component={ViewLogoScreen} />
           <Route path="/edit/:id" component={EditLogoScreen} />

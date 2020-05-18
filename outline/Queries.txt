@@ -100,6 +100,44 @@ query {
   }
 }
 
+##### Querying a single logo #####
+#Query
+query GetLogo($id: ID!) {
+    logo(id: $id)
+    {
+      _id
+    	name
+      backgroundColor
+      borderColor
+      borderRadius
+      borderWidth
+      padding
+      margins
+      width
+      height
+      texts{
+        _id
+        x
+        y
+        text
+        color
+        fontSize
+      }
+      images{
+        _id
+        x
+        y
+        url
+        width
+        height
+      }
+      lastUpdate
+    }
+}
+#Query Variables
+{
+    "id": ""
+}
 
 ##### Updating a logo #####
 #Query
@@ -148,7 +186,7 @@ mutation UpdateLogo(
 
 ##### Deleting Single Logo #####
 #Query
-mutation removeLogo($id: String!) {
+mutation removeLogo($id: ID!) {
     removeLogo(id:$id) {
       _id
     }
