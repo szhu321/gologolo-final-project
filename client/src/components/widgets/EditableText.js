@@ -57,7 +57,7 @@ class EditableText extends Component
             return (
                 <div>
                     <button onClick = {this.editOnClick} >
-                        Edit:
+                        Rename:
                         <BsPencilSquare color='blue' />
                     </button>
                     {this.props.text}

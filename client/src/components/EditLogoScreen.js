@@ -40,7 +40,7 @@ const GET_LOGO = gql`
 
 
 const EditLogoScreen = (props) => {
-    const { loading, error, data, refetch } = useQuery(GET_LOGO, {variables: {id: props.match.params.id}});
+    const { loading, error, data } = useQuery(GET_LOGO, {variables: {id: props.match.params.id}});
 
     if (loading) return 'Loading...';
     if (error) return `Error! ${error.message}`;

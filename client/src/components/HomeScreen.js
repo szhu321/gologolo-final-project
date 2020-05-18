@@ -2,6 +2,7 @@ import React from 'react';
 import LogoCard from './cards/LogoCard';
 import gql from 'graphql-tag';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import {Button} from 'react-bootstrap';
 
 
 const GET_LOGOS = gql
@@ -57,14 +58,14 @@ const HomeScreen = () => {
         <div className="container">
             <div className="row">
                 <div className="col-3">
-                    <button onClick = {() => {
+                    <Button onClick = {() => {
                         createNewLogo({variables: {
                             name: "Gologolo",
                             creatorId: "5ec179d0c589c304384d9ff3"
                         }}).then(logo => {
                             refetch();
                         });
-                    }}>Create New Logo</button>
+                    }}>Create New Logo</Button>
                 </div>
                 <div className="col-9">
                     Recent Projects:
