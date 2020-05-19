@@ -48,6 +48,7 @@ mutation
 	addLogoText(
 		x: 10,
 		y: 10,
+		z: 0,
 		text: "I'm a text",
   		color: "#AC4DD8",
   		fontSize: 24,
@@ -55,6 +56,7 @@ mutation
 	{
 		x
 		y
+		z
 		text
 		color
 		fontSize
@@ -71,6 +73,7 @@ mutation {
 		url: "https://i.imgur.com/XcPE5Vx.jpg",
 		x: 100,
 		y: 100,
+		z: 0
 		width: 720,
 		height: 480,
 		logoId: "")
@@ -78,6 +81,7 @@ mutation {
 		url
 		x
 		y
+		z
 		width
 		height
 		logo {

@@ -35,8 +35,14 @@ const LogoObjectPanel = ({ logo,
                         let active;
                         if(selectedLogoObject)
                             active = selectedLogoObject._id === logoObj._id;
+                        
+                        let uniqueKey;
+                        if(logoObj.type === "text")
+                            uniqueKey = logoObj.idx;
+                        else
+                            uniqueKey = logo.texts.length + logoObj.idx;
                         return (
-                            <ListGroup.Item action active = {active} onClick = {() => {selectLogoObjectCallback(logoObj)}} key={logoObj._id}>
+                            <ListGroup.Item action active = {active} onClick = {() => {selectLogoObjectCallback(logoObj)}} key={uniqueKey}>
                                 {`${logoObj.z}: ${logoObj.text ? logoObj.text : logoObj.url}`}
                             </ListGroup.Item>
                         )

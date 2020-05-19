@@ -28,7 +28,7 @@ const LogoDisplay = (props) =>
                         height: image.height + "px",
                         zIndex: image.z,  
                     }
-                    return <img alt = "" key = {image._id} src = {image.url} style = {style}/>
+                    return <img alt = "" key = {image.idx} src = {image.url} style = {style}/>
                 })}
                 {props.logo.texts.map((text) => {
                     let style = {
@@ -39,7 +39,7 @@ const LogoDisplay = (props) =>
                         color: text.color,
                         userSelect: "none",
                     }
-                    return <div key = {text._id} 
+                    return <div key = {text.idx} 
                             style = {style} >
                             {text.text}</div>
                 })}
