@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import LogoCard from './cards/LogoCard';
 import gql from 'graphql-tag';
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -53,6 +53,10 @@ const HomeScreen = () => {
     const [createNewLogo] = useMutation(CREATE_NEW_LOGO);
     const [deleteLogo] = useMutation(DELETE_LOGO);
     const [showModal, setShowModal] = React.useState(false);
+
+    useEffect(() => {
+        refetch();
+    },[])
 
     const [confirmModalProps, setConfirmModalProps] = React.useState({
         show: false,

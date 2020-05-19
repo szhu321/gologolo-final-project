@@ -273,6 +273,11 @@ const Mutation = new GraphQLObjectType({
                         });
                         return logoText.save();
                     }
+                }).then(logoText => {
+                    //console.log(logoText.logoId);
+                    return Logo.findByIdAndUpdate(logoText.logoId, {lastUpdate: new Date().toISOString()}).then(() => {
+                        return logoText;
+                    });
                 });
             }
         },
@@ -305,6 +310,10 @@ const Mutation = new GraphQLObjectType({
                         });
                         return logoImage.save();
                     }
+                }).then(logoImage => {
+                    return Logo.findByIdAndUpdate(logoImage.logoId, {lastUpdate: new Date().toISOString()}).then(() => {
+                        return logoImage;
+                    });
                 });
             }
         },
@@ -371,15 +380,23 @@ const Mutation = new GraphQLObjectType({
                 logoId: {type: GraphQLID},
             },
             resolve(parent, args) {
-                return LogoText.findByIdAndUpdate(args.id, {
-                    x: args.x,
-                    y: args.y,
-                    z: args.z,
-                    text: args.text,
-                    color: args.color,
-                    fontSize: args.fontSize,
-                    logoId: args.logoId,
+                return LogoText.findById(args.id).then(logoText => {
+                    return LogoText.findByIdAndUpdate(args.id, {
+                        x: args.x? args.x: logoText.x,
+                        y: args.y? args.y: logoText.y,
+                        z: args.z? args.z: logoText.z,
+                        text: args.text? args.text: logoText.text,
+                        color: args.color? args.color: logoText.color,
+                        fontSize: args.fontSize? args.fontSize: logoText.fontSize,
+                        logoId: args.logoId? args.logoId: logoText.logoId,
+                    }).then(logoText => {
+                        //console.log(logoText.logoId);
+                        return Logo.findByIdAndUpdate(logoText.logoId, {lastUpdate: new Date().toISOString()}).then(() => {
+                            return logoText;
+                        });
+                    });
                 });
+                
             }
         },
         updateLogoImage: {
@@ -395,15 +412,22 @@ const Mutation = new GraphQLObjectType({
                 logoId: {type: GraphQLID},
             },
             resolve(parent, args) {
-                return LogoImage.findByIdAndUpdate(args.id, {
-                    url: args.url,
-                    x: args.x,
-                    y: args.y,
-                    z: args.z,
-                    width: args.width,
-                    height: args.height,
-                    logoId: args.logoId,
+                return LogoImage.findById(args.id).then(logoImage => {
+                    return LogoImage.findByIdAndUpdate(args.id, {
+                        url: args.url? args.url: logoImage.url,
+                        x: args.x? args.x: logoImage.x,
+                        y: args.y? args.y: logoImage.y,
+                        z: args.z? args.z: logoImage.z,
+                        width: args.width? args.width: logoImage.width,
+                        height: args.height? args.height: logoImage.height,
+                        logoId: args.logoId? args.logoId: logoImage.logoId,
+                    }).then(logoImage => {
+                        return Logo.findByIdAndUpdate(logoImage.logoId, {lastUpdate: new Date().toISOString()}).then(() => {
+                            return logoImage;
+                        });
+                    });
                 });
+                
             }
         },
         deleteUser: {

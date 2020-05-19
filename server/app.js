@@ -19,6 +19,7 @@ mongoose.connect('mongodb://localhost/my-gologolo', {
     promiseLibrary: require('bluebird'),
     useUnifiedTopology: true,
     useNewUrlParser: true,
+    useFindAndModify: false,
 })
 .then(() => { //if the connection is successful.
     app.listen(port, () => {

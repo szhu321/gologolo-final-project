@@ -3,7 +3,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 
 
-const LogoObjectPanel = ({ logo }) => //class that orders logo object in z-index.
+const LogoObjectPanel = ({ logo, updateLogoImageCallback, updateLogoTextCallback, addTextCallback, addImageCallback}) => //class that orders logo object in z-index.
 {
     let sortedLogos = [];
     logo.texts.forEach(text => {
@@ -18,10 +18,10 @@ const LogoObjectPanel = ({ logo }) => //class that orders logo object in z-index
     //console.log(sortedLogos);
 
     return (
-        <div className='card'>
+        <div className='card' style = {{height: "80%"}}>
             <div className='card-header'>
-                <Button variant = "secondary" block>Add Text</Button>
-                <Button variant = "secondary" block>Add Image</Button>
+                <Button variant = "secondary" onClick = {addTextCallback} block>Add Text</Button>
+                <Button variant = "secondary" onClick = {addImageCallback} block>Add Image</Button>
             </div>
             <div className='card-body'>
                 <ListGroup as="ul">

@@ -1,10 +1,11 @@
 import React from 'react';
 import EditImagePanel from './edit/EditImagePanel';
 import EditTextPanel from './edit/EditTextPanel';
-import {useQuery} from '@apollo/react-hooks';
+import {useQuery, useMutation} from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import LogoDisplay from './edit/LogoDisplay';
 import LogoObjectPanel from './edit/LogoObjectPanel';
+import TextInputModal from './modals/TextInputModal';
 
 const GET_LOGO = gql`
     query GetLogo($id: ID!) {
@@ -42,21 +43,142 @@ const GET_LOGO = gql`
         }
       }`
 
+// const UPDATE_IMAGE = gql`
+// `
+const CREATE_NEW_IMAGE = gql`
+  mutation CreateImage($logoId: ID!, $url: String!, $z: Int!) {
+    addLogoImage(
+      url: $url,
+      x: 0,
+      y: 0,
+      z: $z,
+      width: 100,
+      height: 100,
+      logoId: $logoId,
+    ) {
+      _id
+    }
+  }`
+
+const CREATE_NEW_TEXT = gql`
+  mutation CreateText($logoId: ID!, $text: String!, $z: Int!) {
+    addLogoText(
+      x: 0,
+      y: 0,
+      z: $z,
+      text: $text,
+      color: "#000000",
+      fontSize: 24,
+      logoId: $logoId
+    ) {
+      _id
+    }
+  }`
 
 
 const EditLogoScreen = (props) => {
-    const { loading, error, data } = useQuery(GET_LOGO, {variables: {id: props.match.params.id}});
+    const { loading, error, data, refetch} = useQuery(GET_LOGO, {variables: {id: props.match.params.id}});
+    const [createNewImage] = useMutation(CREATE_NEW_IMAGE);
+    const [createNewText] = useMutation(CREATE_NEW_TEXT);
+    //const [logoData, setLogoData] = React.useState({});
+    //console.log(logoData);
+    const [textInputModalProps, setTextInputModalProps] = React.useState({
+      show: false,
+      closeCallback: () => {
+        setTextInputModalProps(prevProps => {
+          let updatedProps = {
+            show: false
+          }
+          return {...prevProps, ...updatedProps}
+        });
+      }
+    });
+
+    // const updateLogo = (newLogo) =>
+    // {
+
+    // }
+
+    // const updateImage = (newImage) =>
+    // {
+
+    // }
+
+    // const updateText = (newText) =>
+    // {
+
+    // }
+
+    const saveImage = (imageUrl, z, logoId) =>
+    {
+      createNewImage({variables: {
+        logoId: logoId,
+        z: z,
+        url: imageUrl,
+      }}).then(image => {
+        refetch();
+      });
+    }
+
+    const saveText = (text, z, logoId) =>
+    {
+      createNewText({variables: {
+        logoId: logoId,
+        z: z,
+        text: text,
+      }}).then(text => {
+        refetch();
+      });
+    }
 
     if (loading) return 'Loading...';
     if (error) return `Error! ${error.message}`;
 
-    console.log(data);
+    const addText = () => {
+      setTextInputModalProps(prevProps => {
+        let updatedProps = {
+          show: true,
+          header: "Adding Text",
+          inputLabel: "Text: ",
+          placeholder: "Enter Text.",
+          saveCallback: (text) => {
+            let z = data.logo.images.length + data.logo.texts.length;
+            saveText(text, z, data.logo._id);
+          }
+        }
+        return {...prevProps, ...updatedProps}
+      });
+    }
+
+    const addImage = () => {
+      setTextInputModalProps(prevProps => {
+        let updatedProps = {
+          show: true,
+          header: "Adding Image",
+          inputLabel: "URL: ",
+          placeholder: "Enter Image URL.",
+          saveCallback: (url) => {
+            let z = data.logo.images.length + data.logo.texts.length;
+            saveImage(url, z, data.logo._id);
+          }
+        }
+        return {...prevProps, ...updatedProps}
+      });
+    }
+
+    //console.log(data);
+
     return (
-        <div>
+        <div style = {{overflow: "hidden", height: "80vh"}}>
             Editing: {data.logo.name}
-            <div className='row'>
+            <div className='row' style = {{height: "100%"}}>
                 <div className='col-3'>
-                    <LogoObjectPanel logo = {data.logo}/>
+                    <LogoObjectPanel 
+                    logo = {data.logo}
+                    addTextCallback = {addText}
+                    addImageCallback = {addImage}
+                    />
+                    <TextInputModal {...textInputModalProps} />
                 </div>
                 <div className='col-6'>
                     <LogoDisplay logo = {data.logo}/>
