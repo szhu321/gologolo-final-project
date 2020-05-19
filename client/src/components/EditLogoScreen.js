@@ -6,6 +6,7 @@ import gql from 'graphql-tag';
 import LogoDisplay from './edit/LogoDisplay';
 import LogoObjectPanel from './edit/LogoObjectPanel';
 import TextInputModal from './modals/TextInputModal';
+import EditLogoPanel from './edit/EditLogoPanel';
 
 const GET_LOGO = gql`
     query GetLogo($id: ID!) {
@@ -80,8 +81,8 @@ const EditLogoScreen = (props) => {
     const { loading, error, data, refetch} = useQuery(GET_LOGO, {variables: {id: props.match.params.id}});
     const [createNewImage] = useMutation(CREATE_NEW_IMAGE);
     const [createNewText] = useMutation(CREATE_NEW_TEXT);
-    //const [logoData, setLogoData] = React.useState({});
-    //console.log(logoData);
+    //const [logoData, setLogoData] = React.useState();
+    
     const [selectedLogoObject, setSelectedLogoObject] = React.useState();
     const [textInputModalProps, setTextInputModalProps] = React.useState({
       show: false,
@@ -134,7 +135,7 @@ const EditLogoScreen = (props) => {
 
     if (loading) return 'Loading...';
     if (error) return `Error! ${error.message}`;
-
+    
     const addText = () => {
       setTextInputModalProps(prevProps => {
         let updatedProps = {
@@ -168,6 +169,27 @@ const EditLogoScreen = (props) => {
     }
 
     //console.log(data);
+    let displayEditLogo = false;
+    let displayEditImage = false;
+    let displayEditText = false;
+    if(!selectedLogoObject)
+    {
+      displayEditLogo = true;
+      displayEditImage = false;
+      displayEditText = false;
+    }
+    else if(selectedLogoObject.type === "text")
+    {
+      displayEditLogo = false;
+      displayEditImage = false;
+      displayEditText = true;
+    }
+    else if(selectedLogoObject.type === "image")
+    {
+      displayEditLogo = false;
+      displayEditImage = true;
+      displayEditText = false;
+    }
 
     return (
         <div style = {{overflow: "hidden", height: "92vh"}}>
@@ -195,8 +217,9 @@ const EditLogoScreen = (props) => {
                     <LogoDisplay logo = {data.logo}/>
                 </div>
                 <div className='col-3'>
-                    <EditTextPanel />
-                    <EditImagePanel />
+                    {displayEditText? <EditTextPanel logo ={data.logo}/>: null}
+                    {displayEditImage? <EditImagePanel logo ={data.logo}/>: null}
+                    {displayEditLogo? <EditLogoPanel logo ={data.logo}/>: null}
                 </div>
             </div>
         </div>

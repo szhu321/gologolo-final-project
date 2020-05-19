@@ -1,10 +1,10 @@
 import React from 'react'
 
-const LogoPartsPanel = () => {
+const EditLogoPanel = ({logo}) => {
     return (
         <div className='card'>
             <div className='card-header'>
-                Edit Text
+                Edit Logo
             </div>
             <div className='card-body'>
                 
@@ -13,4 +13,4 @@ const LogoPartsPanel = () => {
     )
 }
 
-export default LogoPartsPanel
+export default EditLogoPanel
