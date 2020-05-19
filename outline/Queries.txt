@@ -50,6 +50,7 @@ mutation
 		y: 10,
 		z: 0,
 		text: "I'm a text",
+		type: "text",
   		color: "#AC4DD8",
   		fontSize: 24,
   		logoId: "") 
@@ -58,6 +59,7 @@ mutation
 		y
 		z
 		text
+		type
 		color
 		fontSize
 		logo {
@@ -74,6 +76,7 @@ mutation {
 		x: 100,
 		y: 100,
 		z: 0
+		type: "image",
 		width: 720,
 		height: 480,
 		logoId: "")
@@ -82,6 +85,7 @@ mutation {
 		x
 		y
 		z
+		type
 		width
 		height
 		logo {

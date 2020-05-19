@@ -173,6 +173,7 @@ const EditLogoScreen = (props) => {
             z: z,
             idx: idx,
             text: text,
+            type: "text",
             color: "#000000",
             fontSize: 24,
             logoId: logoData._id,
@@ -196,6 +197,23 @@ const EditLogoScreen = (props) => {
         inputLabel: "URL: ",
         placeholder: "Enter Image URL.",
         saveCallback: (url) => {
+          let z = logoData.images.length + logoData.texts.length;
+          let idx = logoData.images.length;
+          let newImage = {
+            x: 0,
+            y: 0,
+            z: z,
+            type: "image",
+            idx: idx,
+            url: url,
+            wdith: 100,
+            height: 100,
+            logoId: logoData._id,
+          }
+          setLogoData(prevData => {
+            prevData.images.push(newImage);
+            return prevData;
+          });
           //let z = data.logo.images.length + data.logo.texts.length;
           //saveImage(url, z, data.logo._id);
         }
