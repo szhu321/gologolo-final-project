@@ -82,6 +82,7 @@ const EditLogoScreen = (props) => {
     const [createNewText] = useMutation(CREATE_NEW_TEXT);
     //const [logoData, setLogoData] = React.useState({});
     //console.log(logoData);
+    const [selectedLogoObject, setSelectedLogoObject] = React.useState();
     const [textInputModalProps, setTextInputModalProps] = React.useState({
       show: false,
       closeCallback: () => {
@@ -169,12 +170,22 @@ const EditLogoScreen = (props) => {
     //console.log(data);
 
     return (
-        <div style = {{overflow: "hidden", height: "80vh"}}>
+        <div style = {{overflow: "hidden", height: "92vh"}}>
             Editing: {data.logo.name}
             <div className='row' style = {{height: "100%"}}>
                 <div className='col-3'>
                     <LogoObjectPanel 
                     logo = {data.logo}
+                    selectedLogoObject = {selectedLogoObject}
+                    selectLogoObjectCallback = {(logoObj) => {
+                      setSelectedLogoObject(preObj => {
+                        if(!preObj)
+                          return logoObj;
+                        if(logoObj._id === preObj._id)
+                          return null;
+                        else return logoObj;
+                      });
+                    }}
                     addTextCallback = {addText}
                     addImageCallback = {addImage}
                     />

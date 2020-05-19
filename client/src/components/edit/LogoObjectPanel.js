@@ -3,7 +3,13 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 
 
-const LogoObjectPanel = ({ logo, updateLogoImageCallback, updateLogoTextCallback, addTextCallback, addImageCallback}) => //class that orders logo object in z-index.
+const LogoObjectPanel = ({ logo, 
+    updateLogoImageCallback, 
+    updateLogoTextCallback, 
+    addTextCallback, 
+    addImageCallback, 
+    selectedLogoObject,
+    selectLogoObjectCallback,}) => //class that orders logo object in z-index.
 {
     let sortedLogos = [];
     logo.texts.forEach(text => {
@@ -18,7 +24,7 @@ const LogoObjectPanel = ({ logo, updateLogoImageCallback, updateLogoTextCallback
     //console.log(sortedLogos);
 
     return (
-        <div className='card' style = {{height: "80%"}}>
+        <div className='card' style = {{height: "95%"}}>
             <div className='card-header'>
                 <Button variant = "secondary" onClick = {addTextCallback} block>Add Text</Button>
                 <Button variant = "secondary" onClick = {addImageCallback} block>Add Image</Button>
@@ -26,8 +32,11 @@ const LogoObjectPanel = ({ logo, updateLogoImageCallback, updateLogoTextCallback
             <div className='card-body'>
                 <ListGroup as="ul">
                     {sortedLogos.map((logoObj => {
+                        let active;
+                        if(selectedLogoObject)
+                            active = selectedLogoObject._id === logoObj._id;
                         return (
-                            <ListGroup.Item key={logoObj._id} as="li">
+                            <ListGroup.Item action active = {active} onClick = {() => {selectLogoObjectCallback(logoObj)}} key={logoObj._id}>
                                 {`${logoObj.z}: ${logoObj.text ? logoObj.text : logoObj.url}`}
                             </ListGroup.Item>
                         )
