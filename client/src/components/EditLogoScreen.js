@@ -1,7 +1,7 @@
 import React from 'react';
 import EditImagePanel from './edit/EditImagePanel';
 import EditTextPanel from './edit/EditTextPanel';
-import {useQuery, useMutation} from '@apollo/react-hooks';
+import {useQuery} from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import LogoDisplay from './edit/LogoDisplay';
 import LogoObjectPanel from './edit/LogoObjectPanel';
@@ -46,41 +46,41 @@ const GET_LOGO = gql`
 
 // const UPDATE_IMAGE = gql`
 // `
-const CREATE_NEW_IMAGE = gql`
-  mutation CreateImage($logoId: ID!, $url: String!, $z: Int!) {
-    addLogoImage(
-      url: $url,
-      x: 0,
-      y: 0,
-      z: $z,
-      width: 100,
-      height: 100,
-      logoId: $logoId,
-    ) {
-      _id
-    }
-  }`
+// const CREATE_NEW_IMAGE = gql`
+//   mutation CreateImage($logoId: ID!, $url: String!, $z: Int!) {
+//     addLogoImage(
+//       url: $url,
+//       x: 0,
+//       y: 0,
+//       z: $z,
+//       width: 100,
+//       height: 100,
+//       logoId: $logoId,
+//     ) {
+//       _id
+//     }
+//   }`
 
-const CREATE_NEW_TEXT = gql`
-  mutation CreateText($logoId: ID!, $text: String!, $z: Int!) {
-    addLogoText(
-      x: 0,
-      y: 0,
-      z: $z,
-      text: $text,
-      color: "#000000",
-      fontSize: 24,
-      logoId: $logoId
-    ) {
-      _id
-    }
-  }`
+// const CREATE_NEW_TEXT = gql`
+//   mutation CreateText($logoId: ID!, $text: String!, $z: Int!) {
+//     addLogoText(
+//       x: 0,
+//       y: 0,
+//       z: $z,
+//       text: $text,
+//       color: "#000000",
+//       fontSize: 24,
+//       logoId: $logoId
+//     ) {
+//       _id
+//     }
+//   }`
 
 
 const EditLogoScreen = (props) => {
-    const { loading, error, data, refetch} = useQuery(GET_LOGO, {variables: {id: props.match.params.id}});
-    const [createNewImage] = useMutation(CREATE_NEW_IMAGE);
-    const [createNewText] = useMutation(CREATE_NEW_TEXT);
+    const { loading, error, data} = useQuery(GET_LOGO, {variables: {id: props.match.params.id}});
+    // const [createNewImage] = useMutation(CREATE_NEW_IMAGE);
+    // const [createNewText] = useMutation(CREATE_NEW_TEXT);
     //const [logoData, setLogoData] = React.useState();
     
     const [selectedLogoObject, setSelectedLogoObject] = React.useState();
@@ -111,27 +111,27 @@ const EditLogoScreen = (props) => {
 
     // }
 
-    const saveImage = (imageUrl, z, logoId) =>
-    {
-      createNewImage({variables: {
-        logoId: logoId,
-        z: z,
-        url: imageUrl,
-      }}).then(image => {
-        refetch();
-      });
-    }
+    // const saveImage = (imageUrl, z, logoId) =>
+    // {
+    //   createNewImage({variables: {
+    //     logoId: logoId,
+    //     z: z,
+    //     url: imageUrl,
+    //   }}).then(image => {
+    //     refetch();
+    //   });
+    // }
 
-    const saveText = (text, z, logoId) =>
-    {
-      createNewText({variables: {
-        logoId: logoId,
-        z: z,
-        text: text,
-      }}).then(text => {
-        refetch();
-      });
-    }
+    // const saveText = (text, z, logoId) =>
+    // {
+    //   createNewText({variables: {
+    //     logoId: logoId,
+    //     z: z,
+    //     text: text,
+    //   }}).then(text => {
+    //     refetch();
+    //   });
+    // }
 
     if (loading) return 'Loading...';
     if (error) return `Error! ${error.message}`;
@@ -144,8 +144,8 @@ const EditLogoScreen = (props) => {
           inputLabel: "Text: ",
           placeholder: "Enter Text.",
           saveCallback: (text) => {
-            let z = data.logo.images.length + data.logo.texts.length;
-            saveText(text, z, data.logo._id);
+            //let z = data.logo.images.length + data.logo.texts.length;
+            //saveText(text, z, data.logo._id);
           }
         }
         return {...prevProps, ...updatedProps}
@@ -160,8 +160,8 @@ const EditLogoScreen = (props) => {
           inputLabel: "URL: ",
           placeholder: "Enter Image URL.",
           saveCallback: (url) => {
-            let z = data.logo.images.length + data.logo.texts.length;
-            saveImage(url, z, data.logo._id);
+            //let z = data.logo.images.length + data.logo.texts.length;
+            //saveImage(url, z, data.logo._id);
           }
         }
         return {...prevProps, ...updatedProps}

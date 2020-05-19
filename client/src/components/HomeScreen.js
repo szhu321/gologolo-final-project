@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import LogoCard from './cards/LogoCard';
 import gql from 'graphql-tag';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { Button } from 'react-bootstrap';
 import TextInputModal from './modals/TextInputModal.js';
 import ConfirmModal from './modals/ConfirmModal';
+import {Redirect} from 'react-router-dom';
 //import {BrowserRouter} from 'react-router-dom';
 
 const GET_LOGOS = gql
@@ -36,6 +37,7 @@ const CREATE_NEW_LOGO = gql`
             margins: 0,
             width:200,
             height:100) {
+                _id
                 name
             }
     }`
@@ -48,15 +50,15 @@ const DELETE_LOGO = gql`
     }`
 
 const HomeScreen = () => {
-    const { loading, error, data, refetch } = useQuery(GET_LOGOS);
+    const { loading, error, data, refetch } = useQuery(GET_LOGOS, {
+        pollInterval: 500,
+    });
     const [changeLogoNameMutation] = useMutation(UPDATE_LOGO_NAME);
     const [createNewLogo] = useMutation(CREATE_NEW_LOGO);
     const [deleteLogo] = useMutation(DELETE_LOGO);
     const [showModal, setShowModal] = React.useState(false);
-
-    useEffect(() => {
-        refetch();
-    },[])
+    const [redirect, setRedirect] = React.useState(false);
+    const [logoId, setLogoId] = React.useState("");
 
     const [confirmModalProps, setConfirmModalProps] = React.useState({
         show: false,
@@ -84,7 +86,10 @@ const HomeScreen = () => {
                 }
             }).then(logo => {
                 refetch();
-                //return <Redirect push to = {`/edit/${logo._id}`}/>
+                setLogoId(logo.data.addLogo._id);
+                setRedirect(true);
+                //console.log(logo);
+                return logo;
             });
         },
         closeCallback: () => {
@@ -97,6 +102,7 @@ const HomeScreen = () => {
 
     return (
         <div className="container">
+            {redirect ?<Redirect push to = {`/edit/${logoId}`}/>:null}
             <div className="row">
                 <div className="col-3">
                     <TextInputModal
