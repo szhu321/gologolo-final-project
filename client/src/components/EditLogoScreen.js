@@ -521,8 +521,8 @@ const EditLogoScreen = (props) => {
   //data.logo is loaded data.
   let currentLogoData = logoData ? logoData : data.logo;
 
-  console.log("Logo Data", logoData);
-  console.log("Online Data", data.logo);
+  //console.log("Logo Data", logoData);
+  //console.log("Online Data", data.logo);
 
   return (
     <div style={{ overflow: "hidden", height: "92vh" }}>
@@ -552,7 +552,21 @@ const EditLogoScreen = (props) => {
           <TextInputModal {...textInputModalProps} />
         </div>
         <div className='col-6'>
-          <LogoDisplay logo={currentLogoData} />
+          <LogoDisplay 
+          logo={currentLogoData} 
+          changeLogoObjectCallback = {changeLogoObject}
+          selectLogoObjectCallback={(logoObj) => {
+            setSelectedLogoObject(preObj => {
+              if(!logoObj)
+                return null;
+              if (!preObj)
+                return logoObj;
+              if (getLogoObjectId(logoObj) === getLogoObjectId(preObj))
+                return null;
+              else return logoObj;
+            });
+          }}
+          />
         </div>
         <div className='col-3' style={{ zIndex: "1000" }}>
           {displayEditText ? <EditTextPanel
