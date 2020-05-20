@@ -26,7 +26,7 @@ const LogoObjectPanel = ({
         return logoObj1.z - logoObj2.z;
     });
     sortedLogosObjs.reverse();
-    console.log("sortedLogosObjs:", sortedLogosObjs);
+    //console.log("sortedLogosObjs:", sortedLogosObjs);
     //console.log("SelectedLogo: ", selectedLogoObject);
 
     return (
