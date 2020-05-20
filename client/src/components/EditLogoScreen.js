@@ -359,6 +359,14 @@ const EditLogoScreen = (props) => {
     });
   }
 
+  const changeLogo = (newLogo) =>
+  {
+    setLogoData(newLogo);
+    setForce(preForce => {
+      return !preForce;
+    });
+  }
+
   const getLogoObjectId = (logoObj) => {
     let uniqueKey;
     if (logoObj.type === "text")
@@ -437,7 +445,10 @@ const EditLogoScreen = (props) => {
             changeObjHeightCallback={changeLogoObject}
             changeObjWidthCallback={changeLogoObject}
           /> : null}
-          {displayEditLogo ? <EditLogoPanel logo={currentLogoData} /> : null}
+          {displayEditLogo ? <EditLogoPanel 
+          logo={currentLogoData}
+          changeLogoCallback = {changeLogo}
+          /> : null}
         </div>
       </div>
     </div>

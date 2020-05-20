@@ -32,6 +32,23 @@ const EditTextPanel = ({textObj, deleteCallback, changeTextCallBack}) => {
                     </div>
                 </div>
 
+                <div className="input-group mb-3">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text">Color: </span>
+                    </div>
+                    <input 
+                    className="form-control" 
+                        type="color"
+                        defaultValue={textObj.color}
+                        onChange={event => {
+                            textObj.color = event.target.value;
+                            changeTextCallBack(textObj);
+                        }}
+                    />
+                    <div className="input-group-append">
+                        <span className="input-group-text">{textObj.color}</span>
+                    </div>
+                </div>
 
             </div>
         </div>
