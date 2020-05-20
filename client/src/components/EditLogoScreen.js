@@ -344,12 +344,14 @@ const EditLogoScreen = (props) => {
   }
 
   const changeLogoObject = (newLogoObj) => {
-    //console.log("Updating obj", newLogoObj);
+    console.log("Updating obj", newLogoObj);
     setLogoData(prevData => {
-      if (newLogoObj === "text")
+      if (newLogoObj.type === "text"){
         prevData.texts[newLogoObj.idx] = newLogoObj;
-      else
+      }
+      else{
         prevData.images[newLogoObj.idx] = newLogoObj;
+      }
       return prevData;
     });
     setForce(preForce => {
@@ -391,7 +393,8 @@ const EditLogoScreen = (props) => {
   //data.logo is loaded data.
   let currentLogoData = logoData ? logoData : data.logo;
 
-  console.log("Logo Data", selectedLogoObject);
+  console.log("Logo Data", logoData);
+
   return (
     <div style={{ overflow: "hidden", height: "92vh" }}>
       Editing: {currentLogoData.name}
@@ -423,7 +426,11 @@ const EditLogoScreen = (props) => {
           <LogoDisplay logo={currentLogoData} />
         </div>
         <div className='col-3' style={{ zIndex: "1000000" }}>
-          {displayEditText ? <EditTextPanel deleteCallback={deleteLogoObject} textObj={selectedLogoObject} /> : null}
+          {displayEditText ? <EditTextPanel 
+          deleteCallback={deleteLogoObject} 
+          textObj={selectedLogoObject} 
+          changeTextCallBack = {changeLogoObject}
+          /> : null}
           {displayEditImage ? <EditImagePanel
             deleteCallback={deleteLogoObject}
             imgObj={selectedLogoObject}

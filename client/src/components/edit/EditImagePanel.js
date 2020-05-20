@@ -1,47 +1,63 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
 
-const EditImagePanel = ({imgObj, 
+const EditImagePanel = ({ imgObj,
     deleteCallback,
     changeObjHeightCallback,
-    changeObjWidthCallback}) => {
+    changeObjWidthCallback }) => {
 
 
 
     return (
-        <div className = 'card'>
-            <div className = 'card-header'>
+        <div className='card'>
+            <div className='card-header'>
                 Edit Image
-                <Button variant = "danger" onClick = {() => deleteCallback(imgObj)}>Delete</Button>
+                <Button variant="danger" onClick={() => deleteCallback(imgObj)}>Delete</Button>
             </div>
-            <div className = 'card-body'>
-                <label>
-                    Width: {imgObj.width}
+            <div className='card-body'>
+
+                <div className="input-group mb-3">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text">Width: </span>
+                    </div>
                     <input 
-                    type = "range" 
-                    defaultValue = {imgObj.width} 
-                    min = "100" 
-                    max = "1000"
-                    onChange = {event => {
-                        imgObj.width = event.target.value;
-                        changeObjWidthCallback(imgObj);
-                    }}
+                    className="form-control" 
+                        type="range"
+                        defaultValue={imgObj.width}
+                        min="100"
+                        max="1000"
+                        onChange={event => {
+                            imgObj.width = event.target.value;
+                            changeObjWidthCallback(imgObj);
+                        }}
                     />
-                </label>
-                <label>
-                    Height: {imgObj.height}
+                    <div className="input-group-append">
+                        <span className="input-group-text">{imgObj.width}</span>
+                    </div>
+                </div>
+
+                <div className="input-group mb-3">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text">Height: </span>
+                    </div>
                     <input 
-                    defaultValue = {imgObj.height}
-                    type = "range" 
-                    min = "100" 
-                    max = "1000"
-                    onChange = {event => {
+                    className="form-control" 
+                    defaultValue={imgObj.height}
+                    type="range"
+                    min="100"
+                    max="1000"
+                    onChange={event => {
                         //console.log("Event", event);
                         imgObj.height = event.target.value;
                         changeObjHeightCallback(imgObj);
                     }}
                     />
-                </label>
+                    <div className="input-group-append">
+                        <span className="input-group-text">{imgObj.height}</span>
+                    </div>
+                </div>
+
+                
             </div>
         </div>
     )

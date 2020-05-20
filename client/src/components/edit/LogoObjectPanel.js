@@ -26,8 +26,8 @@ const LogoObjectPanel = ({
         return logoObj1.z - logoObj2.z;
     });
     sortedLogosObjs.reverse();
-    //console.log(sortedLogos);
-    console.log("SelectedLogo: ", selectedLogoObject);
+    console.log("sortedLogosObjs:", sortedLogosObjs);
+    //console.log("SelectedLogo: ", selectedLogoObject);
 
     return (
         <div className='card' style = {{height: "95%"}}>
