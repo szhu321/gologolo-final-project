@@ -21,15 +21,7 @@ const LogoCard = ({ logo, logoNameChangeCallback, deleteLogoCallback }) => {
                             textChangeCallback = {(newText) => {
                                 logoNameChangeCallback(_id, newText);
                             }}/> */}
-                            <div>
-                                <Button variant = "secondary" onClick={() => {
-                                    setShowModal(true);
-                                }} >
-                                    Rename:
-                                    <BsPencilSquare color='blue' />
-                                </Button>
-                                {name}
-                            </div>
+                            {name}
                             <TextInputModal
                                 show = {showModal}
                                 defaultValue={name}
@@ -47,7 +39,12 @@ const LogoCard = ({ logo, logoNameChangeCallback, deleteLogoCallback }) => {
                         </div>
                         <div className="col-6 text-right">
                             <Link className="btn btn-secondary" to={`/edit/${_id}`}>Edit</Link>
-                            <Link className="btn btn-secondary" to={`/view/${_id}`}>View</Link>
+                                <Button variant = "secondary" onClick={() => {
+                                    setShowModal(true);
+                                }} >
+                                    Rename:
+                                    <BsPencilSquare color='blue' />
+                                </Button>
                             <button className="btn btn-danger" onClick={() => {
                                 deleteLogoCallback(_id, name); //delete logo.
                             }}>Delete</button>

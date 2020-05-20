@@ -31,18 +31,24 @@ const LogoDisplay = (props) => {
                             zIndex: image.z,
                         }
                         return <img
+                            className="draggable"
                             onDrag={(event) => {
-                                if (event.clientX !== 0) {
-                                    //console.log(event.clientX, event.target);
-                                    image.x = image.x + (event.clientX - image.preX);
-                                    image.y = image.y + (event.clientY - image.preY);
-                                    image.preX = event.clientX;
-                                    image.preY = event.clientY;
-                                    props.changeLogoObjectCallback(image);
-                                }
+                                //console.log(event.buttons);
+                                
+                                    if (event.clientX !== 0) {
+                                        //console.log(event.clientX, event.target);
+                                        image.x = image.x + (event.clientX - image.preX);
+                                        image.y = image.y + (event.clientY - image.preY);
+                                        image.preX = event.clientX;
+                                        image.preY = event.clientY;
+                                        //console.log(event.clientY);
+                                        props.changeLogoObjectCallback(image);
+                                    }
+                                
+
                             }}
                             onMouseDown={(event => {
-                                //console.log(event.clientX, event.target);
+                                console.log(event.clientX, event.target);
                                 image.preX = event.clientX;
                                 image.preY = event.clientY;
                                 props.changeLogoObjectCallback(image);
@@ -64,6 +70,7 @@ const LogoDisplay = (props) => {
                             zIndex: text.z,
                         }
                         return <div
+                            className="draggable"
                             onDrag={(event) => {
                                 if (event.clientX !== 0) {
                                     //console.log(event.clientX, event.target);
