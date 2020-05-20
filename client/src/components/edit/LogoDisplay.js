@@ -20,6 +20,8 @@ const LogoDisplay = (props) =>
         <div>
             <div className = "content" style = {styles.container}>
                 {props.logo.images.map((image) => {
+                    if(image.deleted)// if the logoObj is flagged as deleted dont render it.
+                        return null;
                     let style = {
                         position: "absolute",
                         left: image.x + "px",
@@ -31,6 +33,8 @@ const LogoDisplay = (props) =>
                     return <img alt = "" key = {image.idx} src = {image.url} style = {style}/>
                 })}
                 {props.logo.texts.map((text) => {
+                    if(text.deleted) // if the logoObj is flagged as deleted dont render it.
+                        return null;
                     let style = {
                         position: "absolute",
                         left: text.x + "px",

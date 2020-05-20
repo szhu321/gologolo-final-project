@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import EditImagePanel from './edit/EditImagePanel';
 import EditTextPanel from './edit/EditTextPanel';
 import { useQuery } from '@apollo/react-hooks';
@@ -137,10 +137,10 @@ const EditLogoScreen = (props) => {
   {
     let textArray = data.texts;
     let imageArray = data.images;
-    for (var i = 0; i < textArray.length; i++) {
+    for (let i = 0; i < textArray.length; i++) {
       textArray[i]["idx"] = i;
     }
-    for (var i = 0; i < imageArray.length; i++) {
+    for (let i = 0; i < imageArray.length; i++) {
       imageArray[i]["idx"] = i;
     }
     // console.log("Text Array", textArray);
@@ -222,6 +222,101 @@ const EditLogoScreen = (props) => {
     });
   }
 
+  const canIncreaseZIndex = (logoObj) =>
+  {
+    if(!logoObj)
+      return false;
+    let totalObjs = logoData.texts.length + logoData.images.length;
+    return (logoObj.z < totalObjs - 1);
+  }
+
+  const canDecreaseZIndex = (logoObj) =>
+  {
+    if(!logoObj)
+      return false;
+    return logoObj.z > 0;
+  }
+
+  const increaseZIndex = (logoObj) =>
+  {
+    if(canIncreaseZIndex(logoObj))
+    {
+      let currentZ = logoObj.z;
+      let currentIdx = logoObj.idx;
+      let allLogoObjs = logoData.texts.concat(logoData.images);
+      let otherObj = allLogoObjs.find(obj => {
+        return obj.z === currentZ + 1;
+      });
+      let otherIdx = otherObj.idx;
+      setLogoData(prevData => {
+        if(logoObj.type === "text")
+        {
+          prevData.texts[currentIdx].z = currentZ + 1;
+          //setSelectedLogoObject(preObj => {return prevData.texts[currentIdx]});
+        }
+        else
+        {
+          prevData.images[currentIdx].z = currentZ + 1;
+          //setSelectedLogoObject(preObj => {return prevData.images[currentIdx]});
+        }
+        if(otherObj.type === "text")
+          prevData.texts[otherIdx].z = currentZ;
+        else  
+          prevData.images[otherIdx].z = currentZ;
+        return prevData;
+      });
+    }
+    setSelectedLogoObject(null);
+    //search for logoObj.
+  }
+
+  const decreaseZIndex = (logoObj) =>
+  {
+    if(canDecreaseZIndex(logoObj))
+    {
+      let currentZ = logoObj.z;
+      let currentIdx = logoObj.idx;
+      let allLogoObjs = logoData.texts.concat(logoData.images);
+      let otherObj = allLogoObjs.find(obj => {
+        return obj.z === currentZ - 1;
+      });
+      let otherIdx = otherObj.idx;
+      setLogoData(prevData => {
+        if(logoObj.type === "text")
+        {
+          prevData.texts[currentIdx].z = currentZ - 1;
+          //setSelectedLogoObject(preObj => {return prevData.texts[currentIdx]});
+        }
+        else
+        {
+          prevData.images[currentIdx].z = currentZ - 1;
+          //setSelectedLogoObject(preObj => {return prevData.images[currentIdx]});
+        }
+        if(otherObj.type === "text")
+          prevData.texts[otherIdx].z = currentZ;
+        else  
+          prevData.images[otherIdx].z = currentZ;
+        
+        
+        return prevData;
+      });
+      setSelectedLogoObject(null);
+    }
+  }
+
+  const deleteLogoObject = (logoObj) => 
+  {
+    console.log("Deleting obj", logoObj);
+    setLogoData(prevData => {
+      if(logoObj.type === "text")
+        prevData.texts[logoObj.idx].deleted = true;
+      else
+        prevData.images[logoObj.idx].deleted = true;
+      return prevData;
+    });
+    setSelectedLogoObject(null);
+  }
+
   //console.log(data);
   let displayEditLogo = false;
   let displayEditImage = false;
@@ -242,19 +337,25 @@ const EditLogoScreen = (props) => {
     displayEditText = false;
   }
 
+  //increaseZIndex();
   //logoData is updated but not saved data.
   //data.logo is loaded data.
   let currentLogoData = logoData? logoData: data.logo;
 
-
+  console.log("Logo Data", selectedLogoObject);
   return (
     <div style={{ overflow: "hidden", height: "92vh" }}>
       Editing: {currentLogoData.name}
       <div className='row' style={{ height: "100%" }}>
         <div className='col-3'>
           <LogoObjectPanel
-            logo={currentLogoData}
+            //logo={currentLogoData}
+            texts = {currentLogoData.texts}
+            images = {currentLogoData.images}
             selectedLogoObject={selectedLogoObject}
+            //canMoveDownCallback = {}
+            moveUpOnclickCallback = {increaseZIndex}
+            moveDownOnclickCallback = {decreaseZIndex}
             selectLogoObjectCallback={(logoObj) => {
               setSelectedLogoObject(preObj => {
                 if (!preObj)
@@ -273,8 +374,8 @@ const EditLogoScreen = (props) => {
           <LogoDisplay logo={currentLogoData} />
         </div>
         <div className='col-3'>
-          {displayEditText ? <EditTextPanel logo={currentLogoData} /> : null}
-          {displayEditImage ? <EditImagePanel logo={currentLogoData} /> : null}
+          {displayEditText ? <EditTextPanel deleteCallback = {deleteLogoObject} textObj={selectedLogoObject} /> : null}
+          {displayEditImage ? <EditImagePanel deleteCallback = {deleteLogoObject} imgObj={selectedLogoObject} /> : null}
           {displayEditLogo ? <EditLogoPanel logo={currentLogoData} /> : null}
         </div>
       </div>
