@@ -17,75 +17,80 @@ const LogoDisplay = (props) => {
     }
     return (
         <div>
-            <div onClick={() => { props.selectLogoObjectCallback(null); }} className="content" style={styles.container}>
-                {props.logo.images.map((image) => {
-                    if (image.deleted)// if the logoObj is flagged as deleted dont render it.
-                        return null;
-                    let style = {
-                        position: "absolute",
-                        left: image.x + "px",
-                        top: image.y + "px",
-                        width: image.width + "px",
-                        height: image.height + "px",
-                        zIndex: image.z,
-                    }
-                    return <img
-                        onDrag={(event) => {
-                            if (event.clientX !== 0) {
+            <div>
+                <div onClick={() => { props.selectLogoObjectCallback(null); }} className="content" style={styles.container}>
+                    {props.logo.images.map((image) => {
+                        if (image.deleted)// if the logoObj is flagged as deleted dont render it.
+                            return null;
+                        let style = {
+                            position: "absolute",
+                            left: image.x + "px",
+                            top: image.y + "px",
+                            width: image.width + "px",
+                            height: image.height + "px",
+                            zIndex: image.z,
+                        }
+                        return <img
+                            onDrag={(event) => {
+                                if (event.clientX !== 0) {
+                                    //console.log(event.clientX, event.target);
+                                    image.x = image.x + (event.clientX - image.preX);
+                                    image.y = image.y + (event.clientY - image.preY);
+                                    image.preX = event.clientX;
+                                    image.preY = event.clientY;
+                                    props.changeLogoObjectCallback(image);
+                                }
+                            }}
+                            onMouseDown={(event => {
                                 //console.log(event.clientX, event.target);
-                                image.x = image.x + (event.clientX - image.preX);
-                                image.y = image.y + (event.clientY - image.preY);
                                 image.preX = event.clientX;
                                 image.preY = event.clientY;
                                 props.changeLogoObjectCallback(image);
-                            }
-                        }}
-                        onMouseDown={(event => {
-                            //console.log(event.clientX, event.target);
-                            image.preX = event.clientX;
-                            image.preY = event.clientY;
-                            props.changeLogoObjectCallback(image);
-                        })}
+                            })}
 
-                        draggable
-                        alt="" key={image.idx} src={image.url} style={style} />
-                })}
-                {props.logo.texts.map((text) => {
-                    if (text.deleted) // if the logoObj is flagged as deleted dont render it.
-                        return null;
-                    let style = {
-                        position: "absolute",
-                        left: text.x + "px",
-                        top: text.y + "px",
-                        fontSize: text.fontSize + "px",
-                        color: text.color,
-                        userSelect: "none",
-                        zIndex: text.z,
-                    }
-                    return <div
-                        onDrag={(event) => {
-                            if (event.clientX !== 0) {
+                            draggable
+                            alt="" key={image.idx} src={image.url} style={style} />
+                    })}
+                    {props.logo.texts.map((text) => {
+                        if (text.deleted) // if the logoObj is flagged as deleted dont render it.
+                            return null;
+                        let style = {
+                            position: "absolute",
+                            left: text.x + "px",
+                            top: text.y + "px",
+                            fontSize: text.fontSize + "px",
+                            color: text.color,
+                            userSelect: "none",
+                            zIndex: text.z,
+                        }
+                        return <div
+                            onDrag={(event) => {
+                                if (event.clientX !== 0) {
+                                    //console.log(event.clientX, event.target);
+                                    text.x = text.x + (event.clientX - text.preX);
+                                    text.y = text.y + (event.clientY - text.preY);
+                                    text.preX = event.clientX;
+                                    text.preY = event.clientY;
+                                    props.changeLogoObjectCallback(text);
+                                }
+                            }}
+                            onMouseDown={(event => {
                                 //console.log(event.clientX, event.target);
-                                text.x = text.x + (event.clientX - text.preX);
-                                text.y = text.y + (event.clientY - text.preY);
                                 text.preX = event.clientX;
                                 text.preY = event.clientY;
                                 props.changeLogoObjectCallback(text);
-                            }
-                        }}
-                        onMouseDown={(event => {
-                            //console.log(event.clientX, event.target);
-                            text.preX = event.clientX;
-                            text.preY = event.clientY;
-                            props.changeLogoObjectCallback(text);
-                        })}
-                        draggable
-                        key={text.idx}
-                        style={style} >
-                        {text.text}</div>
-                })}
+                            })}
+                            draggable
+                            key={text.idx}
+                            style={style} >
+                            {text.text}</div>
+                    })}
+                </div>
+
             </div>
+
         </div>
+
     )
 }
 

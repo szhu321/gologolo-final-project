@@ -9,6 +9,8 @@ import TextInputModal from './modals/TextInputModal';
 import EditLogoPanel from './edit/EditLogoPanel';
 import Button from 'react-bootstrap/Button';
 import { Promise } from 'bluebird';
+import html2canvas from 'html2canvas';
+import ConfirmModal from './modals/ConfirmModal';
 
 const GET_LOGO = gql`
     query GetLogo($id: ID!) {
@@ -113,6 +115,9 @@ const DELETE_TEXT = gql`
     }
   }`
 
+const cachedImages = [];
+
+
 const EditLogoScreen = (props) => {
   const { loading, error, data, refetch } = useQuery(GET_LOGO, { variables: { id: props.match.params.id } });
   const [createNewImageDB] = useMutation(CREATE_NEW_IMAGE);
@@ -137,6 +142,18 @@ const EditLogoScreen = (props) => {
       });
     }
   });
+
+  const [confirmModalProps, setConfirmModalProps] = React.useState({
+    show: false,
+    header: "Exporting Logo",
+    closeCallback: () => {
+        //console.log("Closing");
+        setConfirmModalProps(prevProps => {
+            let updatedValues = {show: false}
+            return {...prevProps, ...updatedValues}
+        });
+    },
+});
 
   if (force) {
     //Eh what?
@@ -254,6 +271,15 @@ const EditLogoScreen = (props) => {
     });
   }
 
+  
+
+  const cacheImage = (url) =>
+  {
+    let image = new Image();
+    image.src = url;
+    cachedImages.push(image);
+  }
+
   const initializeData = (dataObj) => // adding index attribute to each image and text.
   {
     let data = Object.assign({}, dataObj);
@@ -263,6 +289,7 @@ const EditLogoScreen = (props) => {
       textArray[i]["idx"] = i;
     }
     for (let i = 0; i < imageArray.length; i++) {
+      cacheImage(imageArray[i].url);
       imageArray[i]["idx"] = i;
     }
     // console.log("Text Array", textArray);
@@ -520,7 +547,7 @@ const EditLogoScreen = (props) => {
   //logoData is updated but not saved data.
   //data.logo is loaded data.
   let currentLogoData = logoData ? logoData : data.logo;
-
+  let displayRef = React.createRef();
   //console.log("Logo Data", logoData);
   //console.log("Online Data", data.logo);
 
@@ -551,7 +578,7 @@ const EditLogoScreen = (props) => {
           />
           <TextInputModal {...textInputModalProps} />
         </div>
-        <div className='col-6'>
+        <div ref = {displayRef}className='col-6'>
           <LogoDisplay 
           logo={currentLogoData} 
           changeLogoObjectCallback = {changeLogoObject}
@@ -587,6 +614,36 @@ const EditLogoScreen = (props) => {
           <Button variant="success" onClick={() => saveLogo(logoData)}>
             Save Logo
           </Button>
+          <Button variant="success" onClick={() => {
+            //console.log()
+            html2canvas(displayRef.current).then(canvas => {
+              //console.log(canvas);
+              setConfirmModalProps(prevProps => {
+                let updatedValues = {
+                    show: true,
+                    bodyText: "Would you like to save as png?",
+                    confirmCallback: () => {
+                      
+                      
+                        console.log(window);
+                        canvas.toBlob(blob => {
+                          let link = document.createElement('a');
+                          link.download = "image.png"
+                          link.href = URL.createObjectURL(blob);
+                          link.click();
+                          //window.navigator.msSaveBlob(blob, "canvas-img.png");
+                        });
+                        
+                      
+                    },
+                }
+                return {...prevProps, ...updatedValues};
+            });
+            })
+          }}>
+            Export Logo
+          </Button>
+          <ConfirmModal {...confirmModalProps}/>
         </div>
       </div>
     </div>

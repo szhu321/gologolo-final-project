@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 
 const ConfirmModal = ({show, bodyText, closeCallback, header, confirmCallback}) =>
 {
-    console.log(closeCallback);
+    //console.log(closeCallback);
     return(
         <Modal show={show} onHide={closeCallback}>
                 <Modal.Header>

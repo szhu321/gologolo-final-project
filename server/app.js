@@ -5,8 +5,10 @@ const graphqlHttp = require('express-graphql');
 const mongoose = require('mongoose');
 const schema = require('./graphql/schema');
 var cors = require('cors');
+//const proxy = require('html2canvas-proxy');
 
 
+//app.use('/', proxy());
 app.use(express.json());
 app.use('*', cors());
 app.use('/graphql', cors(), graphqlHttp({
