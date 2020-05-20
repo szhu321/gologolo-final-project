@@ -42,6 +42,7 @@ const LogoDisplay = (props) =>
                         fontSize: text.fontSize + "px",
                         color: text.color,
                         userSelect: "none",
+                        zIndex: text.z,
                     }
                     return <div key = {text.idx} 
                             style = {style} >

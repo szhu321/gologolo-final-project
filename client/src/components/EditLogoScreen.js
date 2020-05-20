@@ -82,6 +82,7 @@ const EditLogoScreen = (props) => {
   // const [createNewImage] = useMutation(CREATE_NEW_IMAGE);
   // const [createNewText] = useMutation(CREATE_NEW_TEXT);
   const [logoData, setLogoData] = React.useState();
+  const [force, setForce] = React.useState(false);
 
   const [selectedLogoObject, setSelectedLogoObject] = React.useState();
   const [textInputModalProps, setTextInputModalProps] = React.useState({
@@ -252,12 +253,12 @@ const EditLogoScreen = (props) => {
         if(logoObj.type === "text")
         {
           prevData.texts[currentIdx].z = currentZ + 1;
-          //setSelectedLogoObject(preObj => {return prevData.texts[currentIdx]});
+          setSelectedLogoObject(preObj => {return prevData.texts[currentIdx]});
         }
         else
         {
           prevData.images[currentIdx].z = currentZ + 1;
-          //setSelectedLogoObject(preObj => {return prevData.images[currentIdx]});
+          setSelectedLogoObject(preObj => {return prevData.images[currentIdx]});
         }
         if(otherObj.type === "text")
           prevData.texts[otherIdx].z = currentZ;
@@ -266,7 +267,9 @@ const EditLogoScreen = (props) => {
         return prevData;
       });
     }
-    setSelectedLogoObject(null);
+    setForce(preForce => {
+      return !preForce;
+    });
     //search for logoObj.
   }
 
@@ -285,12 +288,12 @@ const EditLogoScreen = (props) => {
         if(logoObj.type === "text")
         {
           prevData.texts[currentIdx].z = currentZ - 1;
-          //setSelectedLogoObject(preObj => {return prevData.texts[currentIdx]});
+          setSelectedLogoObject(preObj => {return prevData.texts[currentIdx]});
         }
         else
         {
           prevData.images[currentIdx].z = currentZ - 1;
-          //setSelectedLogoObject(preObj => {return prevData.images[currentIdx]});
+          setSelectedLogoObject(preObj => {return prevData.images[currentIdx]});
         }
         if(otherObj.type === "text")
           prevData.texts[otherIdx].z = currentZ;
@@ -300,7 +303,9 @@ const EditLogoScreen = (props) => {
         
         return prevData;
       });
-      setSelectedLogoObject(null);
+      setForce(preForce => {
+        return !preForce;
+      });
     }
   }
 
@@ -315,6 +320,21 @@ const EditLogoScreen = (props) => {
       return prevData;
     });
     setSelectedLogoObject(null);
+  }
+
+  const changeLogoObject = (newLogoObj) =>
+  {
+    //console.log("Updating obj", newLogoObj);
+    setLogoData(prevData => {
+      if(newLogoObj === "text")
+        prevData.texts[newLogoObj.idx] = newLogoObj;
+      else
+        prevData.images[newLogoObj.idx] = newLogoObj;
+      return prevData;
+    });
+    setForce(preForce => {
+      return !preForce;
+    });
   }
 
   //console.log(data);
@@ -373,9 +393,14 @@ const EditLogoScreen = (props) => {
         <div className='col-6'>
           <LogoDisplay logo={currentLogoData} />
         </div>
-        <div className='col-3'>
+        <div className='col-3' style = {{zIndex:"1000000"}}>
           {displayEditText ? <EditTextPanel deleteCallback = {deleteLogoObject} textObj={selectedLogoObject} /> : null}
-          {displayEditImage ? <EditImagePanel deleteCallback = {deleteLogoObject} imgObj={selectedLogoObject} /> : null}
+          {displayEditImage ? <EditImagePanel 
+          deleteCallback = {deleteLogoObject} 
+          imgObj={selectedLogoObject}
+          changeObjHeightCallback = {changeLogoObject}
+          changeObjWidthCallback = {changeLogoObject}
+           /> : null}
           {displayEditLogo ? <EditLogoPanel logo={currentLogoData} /> : null}
         </div>
       </div>
