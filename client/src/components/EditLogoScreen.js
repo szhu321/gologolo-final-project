@@ -234,13 +234,18 @@ const EditLogoScreen = (props) => {
   const canIncreaseZIndex = (logoObj) => {
     if (!logoObj)
       return false;
-    let totalObjs = logoData.texts.length + logoData.images.length;
+    let allLogoObjs = logoData.texts.concat(logoData.images);
+    allLogoObjs = allLogoObjs.filter(logoObjs => {
+      return !logoObjs.deleted;
+    });
+    let totalObjs = allLogoObjs.length;
     return (logoObj.z < totalObjs - 1);
   }
 
   const canDecreaseZIndex = (logoObj) => {
     if (!logoObj)
       return false;
+
     return logoObj.z > 0;
   }
 
@@ -249,6 +254,9 @@ const EditLogoScreen = (props) => {
       let currentZ = logoObj.z;
       let currentIdx = logoObj.idx;
       let allLogoObjs = logoData.texts.concat(logoData.images);
+      allLogoObjs = allLogoObjs.filter(logoObjs => {
+        return !logoObjs.deleted;
+      });
       let otherObj = allLogoObjs.find(obj => {
         return obj.z === currentZ + 1;
       });
@@ -280,6 +288,9 @@ const EditLogoScreen = (props) => {
       let currentZ = logoObj.z;
       let currentIdx = logoObj.idx;
       let allLogoObjs = logoData.texts.concat(logoData.images);
+      allLogoObjs = allLogoObjs.filter(logoObjs => {
+        return !logoObjs.deleted;
+      });
       let otherObj = allLogoObjs.find(obj => {
         return obj.z === currentZ - 1;
       });
@@ -346,6 +357,15 @@ const EditLogoScreen = (props) => {
     });
   }
 
+  const getLogoObjectId = (logoObj) => {
+    let uniqueKey;
+    if (logoObj.type === "text")
+      uniqueKey = logoObj.idx;
+    else
+      uniqueKey = logoData.texts.length + logoObj.idx;
+    return uniqueKey;
+  }
+
   //console.log(data);
   let displayEditLogo = false;
   let displayEditImage = false;
@@ -389,7 +409,7 @@ const EditLogoScreen = (props) => {
               setSelectedLogoObject(preObj => {
                 if (!preObj)
                   return logoObj;
-                if (logoObj._id === preObj._id)
+                if (getLogoObjectId(logoObj) === getLogoObjectId(preObj))
                   return null;
                 else return logoObj;
               });
