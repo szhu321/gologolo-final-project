@@ -37,6 +37,15 @@ const LogoObjectPanel = ({
             </div>
             <div className='card-body'>
                 <div>
+                    <div>
+                        Select to edit texts and images.
+                    </div>
+                    <div>
+                        Note: drag in drop works in Chrome.
+                    </div>
+                    <div>
+                        Objects on the top have higher z-index.
+                    </div>
                     <Button onClick = {() => {moveUpOnclickCallback(selectedLogoObject)}} style = {{width: "50%"}}>^</Button>
                     <Button onClick = {() => {moveDownOnclickCallback(selectedLogoObject)}} style = {{width: "50%"}}>v</Button>
                 </div>
@@ -55,7 +64,7 @@ const LogoObjectPanel = ({
                             uniqueKey = texts.length + logoObj.idx;
                         return (
                             <ListGroup.Item action active = {active} onClick = {() => {selectLogoObjectCallback(logoObj)}} key={uniqueKey}>
-                                {`${logoObj.z}: ${logoObj.text ? logoObj.text : logoObj.url}`}
+                                {`${logoObj.type}: ${logoObj.text ? logoObj.text : logoObj.url}`}
                             </ListGroup.Item>
                         )
                     }))}

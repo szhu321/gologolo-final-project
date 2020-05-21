@@ -113,7 +113,10 @@ const HomeScreen = () => {
                     }}>Create New Logo</Button>
                 </div>
                 <div className="col-9">
-                    Recent Projects:
+                    <h3>
+                        Recent Projects:
+                    </h3>
+                    
                     <div>
                         {data.logos.map(logo => {
                             return <LogoCard

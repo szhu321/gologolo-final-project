@@ -147,13 +147,13 @@ const EditLogoScreen = (props) => {
     show: false,
     header: "Exporting Logo",
     closeCallback: () => {
-        //console.log("Closing");
-        setConfirmModalProps(prevProps => {
-            let updatedValues = {show: false}
-            return {...prevProps, ...updatedValues}
-        });
+      //console.log("Closing");
+      setConfirmModalProps(prevProps => {
+        let updatedValues = { show: false }
+        return { ...prevProps, ...updatedValues }
+      });
     },
-});
+  });
 
   if (force) {
     //Eh what?
@@ -161,7 +161,7 @@ const EditLogoScreen = (props) => {
   const saveLogo = (logo) => {
     console.log("Saving Logo", logo);
     setLogoData(null);
-    setForce(preForce => {return !preForce});
+    setForce(preForce => { return !preForce });
     let logoObjs = logo.images.concat(logo.texts);
     //update main logo
     updateLogoDB({
@@ -178,103 +178,102 @@ const EditLogoScreen = (props) => {
         height: parseInt(logo.height),
       }
     })
-    .then(() => {
-      return Promise.all(logoObjs.map(logoObj => {
-        //update logoObj
-        //Add logoObj if it is new and not deleted.
-        //Update logoObj if its not new and not deleted.
-        //Delete logoObj if its not new and deleted.
-        let isNew = (!logoObj._id);
-        let deleted = logoObj.deleted;
-        let type = logoObj.type;
-        if (isNew) {
-          if (!deleted) {
-            if (type === "image") {
-              return createNewImageDB({
-                variables: {
-                  logoId: logo._id,
-                  url: logoObj.url,
-                  x: parseInt(logoObj.x),
-                  y: parseInt(logoObj.y),
-                  z: parseInt(logoObj.z),
-                  width: parseInt(logoObj.width),
-                  height: parseInt(logoObj.height),
-                }
-              });
-            }
-            else {
-              return createNewTextDB({
-                variables: {
-                  logoId: logo._id,
-                  text: logoObj.text,
-                  x: parseInt(logoObj.x),
-                  y: parseInt(logoObj.y),
-                  z: parseInt(logoObj.z),
-                  color: logoObj.color,
-                  fontSize: parseInt(logoObj.fontSize),
-                }
-              });
-            }
-          }
-        }
-        else {
-          if (!deleted) {
-            if (type === "image") {
-              return updateImageDB({
-                variables: {
-                  id: logoObj._id,
-                  url: logoObj.url,
-                  x: parseInt(logoObj.x),
-                  y: parseInt(logoObj.y),
-                  z: parseInt(logoObj.z),
-                  width: parseInt(logoObj.width),
-                  height: parseInt(logoObj.height),
-                  logoId: logo._id,
-                }
-              });
-            }
-            else {
-              return updateTextDB({
-                variables: {
-                  id: logoObj._id,
-                  x: parseInt(logoObj.x),
-                  y: parseInt(logoObj.y),
-                  z: parseInt(logoObj.z),
-                  text: logoObj.text,
-                  color: logoObj.color,
-                  fontSize: parseInt(logoObj.fontSize),
-                  logoId: logo._id,
-                }
-              })
+      .then(() => {
+        return Promise.all(logoObjs.map(logoObj => {
+          //update logoObj
+          //Add logoObj if it is new and not deleted.
+          //Update logoObj if its not new and not deleted.
+          //Delete logoObj if its not new and deleted.
+          let isNew = (!logoObj._id);
+          let deleted = logoObj.deleted;
+          let type = logoObj.type;
+          if (isNew) {
+            if (!deleted) {
+              if (type === "image") {
+                return createNewImageDB({
+                  variables: {
+                    logoId: logo._id,
+                    url: logoObj.url,
+                    x: parseInt(logoObj.x),
+                    y: parseInt(logoObj.y),
+                    z: parseInt(logoObj.z),
+                    width: parseInt(logoObj.width),
+                    height: parseInt(logoObj.height),
+                  }
+                });
+              }
+              else {
+                return createNewTextDB({
+                  variables: {
+                    logoId: logo._id,
+                    text: logoObj.text,
+                    x: parseInt(logoObj.x),
+                    y: parseInt(logoObj.y),
+                    z: parseInt(logoObj.z),
+                    color: logoObj.color,
+                    fontSize: parseInt(logoObj.fontSize),
+                  }
+                });
+              }
             }
           }
           else {
-            if (type === "image") {
-              return deleteImageDB({
-                variables: {
-                  id: logoObj._id
-                }
-              });
+            if (!deleted) {
+              if (type === "image") {
+                return updateImageDB({
+                  variables: {
+                    id: logoObj._id,
+                    url: logoObj.url,
+                    x: parseInt(logoObj.x),
+                    y: parseInt(logoObj.y),
+                    z: parseInt(logoObj.z),
+                    width: parseInt(logoObj.width),
+                    height: parseInt(logoObj.height),
+                    logoId: logo._id,
+                  }
+                });
+              }
+              else {
+                return updateTextDB({
+                  variables: {
+                    id: logoObj._id,
+                    x: parseInt(logoObj.x),
+                    y: parseInt(logoObj.y),
+                    z: parseInt(logoObj.z),
+                    text: logoObj.text,
+                    color: logoObj.color,
+                    fontSize: parseInt(logoObj.fontSize),
+                    logoId: logo._id,
+                  }
+                })
+              }
             }
             else {
-              return deleteTextDB({ variables: { id: logoObj._id } })
+              if (type === "image") {
+                return deleteImageDB({
+                  variables: {
+                    id: logoObj._id
+                  }
+                });
+              }
+              else {
+                return deleteTextDB({ variables: { id: logoObj._id } })
+              }
             }
           }
-        }
-        return null;
-      }));
-    }).finally(() => {
-      refetch().then(() => {
-        setLogoData(null);
-        setForce(preForce => {return !preForce});
+          return null;
+        }));
+      }).finally(() => {
+        refetch().then(() => {
+          setLogoData(null);
+          setForce(preForce => { return !preForce });
+        });
       });
-    });
   }
 
-  
 
-  const cacheImage = (url) =>
-  {
+
+  const cacheImage = (url) => {
     let image = new Image();
     image.src = url;
     cachedImages.push(image);
@@ -493,6 +492,16 @@ const EditLogoScreen = (props) => {
 
   const changeLogoObject = (newLogoObj) => {
     //console.log("Updating obj", newLogoObj);
+    //check bounds.
+    if (newLogoObj.x < 0)
+      newLogoObj.x = 0;
+    if (newLogoObj.x > logoData.width)
+      newLogoObj.x = logoData.width
+    if (newLogoObj.y < 0)
+      newLogoObj.y = 0;
+    if (newLogoObj.y > logoData.height)
+      newLogoObj.y = logoData.height
+
     setLogoData(prevData => {
       if (newLogoObj.type === "text") {
         prevData.texts[newLogoObj.idx] = newLogoObj;
@@ -552,7 +561,7 @@ const EditLogoScreen = (props) => {
   //console.log("Online Data", data.logo);
 
   return (
-    <div style={{ overflow: "hidden", height: "92vh" }}>
+    <div style={{ height: "92vh" }}>
       Editing: {currentLogoData.name}
       <div className='row' style={{ height: "100%" }}>
         <div className='col-3'>
@@ -578,24 +587,17 @@ const EditLogoScreen = (props) => {
           />
           <TextInputModal {...textInputModalProps} />
         </div>
-        <div ref = {displayRef}className='col-6'>
-          <LogoDisplay 
-          logo={currentLogoData} 
-          changeLogoObjectCallback = {changeLogoObject}
-          selectLogoObjectCallback={(logoObj) => {
-            setSelectedLogoObject(preObj => {
-              if(!logoObj)
-                return null;
-              if (!preObj)
-                return logoObj;
-              if (getLogoObjectId(logoObj) === getLogoObjectId(preObj))
-                return null;
-              else return logoObj;
-            });
-          }}
+        <div ref={displayRef} className='col-6'>
+          <LogoDisplay
+            logo={currentLogoData}
+            changeLogoObjectCallback={changeLogoObject}
+            selectLogoObjectCallback={(logoObj) => {
+              setSelectedLogoObject(logoObj);
+            }}
           />
         </div>
         <div className='col-3' style={{ zIndex: "1000" }}>
+          
           {displayEditText ? <EditTextPanel
             deleteCallback={deleteLogoObject}
             textObj={selectedLogoObject}
@@ -611,39 +613,42 @@ const EditLogoScreen = (props) => {
             logo={currentLogoData}
             changeLogoCallback={changeLogo}
           /> : null}
-          <Button variant="success" onClick={() => saveLogo(logoData)}>
-            Save Logo
+          <div className="card">
+            <Button variant="success" onClick={() => saveLogo(logoData)}>
+              Save Logo
           </Button>
-          <Button variant="success" onClick={() => {
-            //console.log()
-            html2canvas(displayRef.current).then(canvas => {
-              //console.log(canvas);
-              setConfirmModalProps(prevProps => {
-                let updatedValues = {
+            <Button variant="success" onClick={() => {
+              //console.log()
+              html2canvas(displayRef.current).then(canvas => {
+                //console.log(canvas);
+                setConfirmModalProps(prevProps => {
+                  let updatedValues = {
                     show: true,
                     bodyText: "Would you like to save as png?",
                     confirmCallback: () => {
-                      
-                      
-                        console.log(window);
-                        canvas.toBlob(blob => {
-                          let link = document.createElement('a');
-                          link.download = "image.png"
-                          link.href = URL.createObjectURL(blob);
-                          link.click();
-                          //window.navigator.msSaveBlob(blob, "canvas-img.png");
-                        });
-                        
-                      
+
+
+                      console.log(window);
+                      canvas.toBlob(blob => {
+                        let link = document.createElement('a');
+                        link.download = "image.png"
+                        link.href = URL.createObjectURL(blob);
+                        link.click();
+                        //window.navigator.msSaveBlob(blob, "canvas-img.png");
+                      });
+
+
                     },
-                }
-                return {...prevProps, ...updatedValues};
-            });
-            })
-          }}>
-            Export Logo
+                  }
+                  return { ...prevProps, ...updatedValues };
+                });
+              })
+            }}>
+              Export Logo
           </Button>
-          <ConfirmModal {...confirmModalProps}/>
+          </div>
+
+          <ConfirmModal {...confirmModalProps} />
         </div>
       </div>
     </div>
